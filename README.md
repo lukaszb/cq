@@ -1,5 +1,7 @@
 ## Simple Event Sourcing
 
+[![build-status-image]][travis]
+
 ### How to use it
 
 For now please refer to examples.

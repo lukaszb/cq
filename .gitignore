@@ -1,0 +1,6 @@
+.tox
+venv
+*.pyc
+*.log
+*.bak
+*.orig

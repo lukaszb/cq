@@ -21,11 +21,13 @@ class DjangoStorage(Storage):
         try:
             UniqueItem.objects.create(namespace=namespace, value=value, entity_id=entity_id)
         except IntegrityError:
-            msg = 'Value %r already exists within %r namespace' % (value, namespace)
-            raise Storage.DuplicatedItemError(msg)
+            raise Storage.DuplicatedItemError('%s:%s already exists' % (namespace, value))
 
     def get_unique(self, namespace, value):
         try:
             return UniqueItem.objects.get(namespace=namespace, value=value).entity_id
         except UniqueItem.DoesNotExist:
-            return None
+            raise self.DoesNotExist('%s:%s was not set' % (namespace, value))
+
+    def has_unique(self, namespace, value):
+        return UniqueItem.objects.filter(namespace=namespace, value=value).exists()

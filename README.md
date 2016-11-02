@@ -11,3 +11,7 @@ For now please refer to examples.
 
 - https://github.com/johnbywater/eventsourcing
 - https://www.youtube.com/watch?v=JHGkaShoyNs
+
+
+[build-status-image]: https://secure.travis-ci.org/lukaszb/ses.svg?branch=master
+[travis]: http://travis-ci.org/lukaszb/ses

@@ -10,7 +10,7 @@ class RegisterSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def validate_email(self, value):
-        if app.storage.get_unique('user', value) is not None:
+        if app.storage.has_unique('user', value):
             raise serializers.ValidationError('E-mail is already registered')
         return value
 

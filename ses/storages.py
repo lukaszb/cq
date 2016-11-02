@@ -1,5 +1,11 @@
+from collections import defaultdict
+from collections import namedtuple
 from ses.exceptions import SesError
 from ses.handlers import publish
+
+
+Event = namedtuple('Event', 'entity,action,entity_id,data')
+UniqueItem = namedtuple('UniqueItem', '')
 
 
 class Storage:
@@ -28,14 +34,6 @@ class Storage:
 
     def has_unique(self, namespace, value):
         raise NotImplementedError
-
-
-from collections import defaultdict
-from collections import namedtuple
-
-
-Event = namedtuple('Event', 'entity,action,entity_id,data')
-UniqueItem = namedtuple('UniqueItem', '')
 
 
 class LocalMemoryStorage(Storage):

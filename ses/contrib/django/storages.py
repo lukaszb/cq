@@ -1,5 +1,5 @@
 from django.db import IntegrityError
-from ses.contrib.django.models import Event as EventModal
+from ses.contrib.django.models import Event as EventModel
 from ses.contrib.django.models import UniqueItem
 from ses.events import Event
 from ses.storages import Storage
@@ -13,7 +13,7 @@ class DjangoStorage(Storage):
         return obj
 
     def get_events(self, entity_id):
-        qs = EventModal.objects.filter(entity_id=entity_id).order_by('id')
+        qs = EventModel.objects.filter(entity_id=entity_id).order_by('id')
         return (from_model(e) for e in qs)
 
     def book_unique(self, namespace, value, entity_id):
@@ -33,7 +33,7 @@ class DjangoStorage(Storage):
 
 
 def to_model(event):
-    return EventModal(
+    return EventModel(
         name=event.name,
         entity_id=event.entity_id,
         data=event.data,

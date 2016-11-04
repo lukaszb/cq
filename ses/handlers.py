@@ -1,16 +1,12 @@
-from .entities import Action
 from collections import defaultdict
 
 
 handlers_registry = defaultdict(set)
 
 
-def register_handler(entity_action):
-    if isinstance(entity_action, Action):
-        entity_action = str(entity_action)
-
+def register_handler(event_name):
     def wrap(handler):
-        handlers_registry[entity_action].add(handler)
+        handlers_registry[event_name].add(handler)
 
         def inner(event, entity):
             return
@@ -25,4 +21,4 @@ def publish(event):
 
 
 def get_handlers(event):
-    return handlers_registry[event.get_entity_action()]
+    return handlers_registry[event.name]

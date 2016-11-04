@@ -5,9 +5,8 @@ import jsonfield
 
 class Event(models.Model):
     ts = models.DateTimeField(default=timezone.now)
+    name = models.CharField(max_length=128, db_index=True)
     entity_id = models.CharField(max_length=128, db_index=True)
-    entity = models.CharField(max_length=255, db_index=True)
-    action = models.CharField(max_length=255, db_index=True)
     data = jsonfield.JSONField(null=True)
 
     def __str__(self):

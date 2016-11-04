@@ -13,35 +13,42 @@ def local_storage():
 @mock.patch('ses.storages.publish')
 def test_store(publish):
     storage = Storage()
-    with mock.patch.object(storage, 'append', return_value='EVENT') as append:
-        storage.store('User', 'Registered', 'aabbcc', data={'name': 'joe'})
-        append.assert_called_once_with('User', 'Registered', 'aabbcc', {'name': 'joe'})
+    with mock.patch.object(storage, 'create_event', return_value='EVENT') as create_event,\
+         mock.patch.object(storage, 'append') as append:
+        storage.store('User.Registered', 'aabbcc', {'name': 'joe'})
+        create_event.assert_called_once_with(
+            name='User.Registered',
+            entity_id='aabbcc',
+            data={'name': 'joe'},
+            ts=None,
+        )
+        append.assert_called_once_with('EVENT')
         publish.assert_called_once_with('EVENT')
 
 
 def test_local__append(local_storage):
-    local_storage.append('User', 'Registered', 'JOE_ID', data={'name': 'joe'})
-    local_storage.append('User', 'Registered', 'JANE_ID', data={'name': 'jane'})
-    local_storage.append('User', 'Activated', 'JOE_ID')
+    local_storage.store('User.Registered', 'JOE_ID', {'name': 'joe'}, 'TS')
+    local_storage.store('User.Registered', 'JANE_ID', {'name': 'jane'}, 'TS')
+    local_storage.store('User.Activated', 'JOE_ID', ts='TS')
 
-    assert local_storage.events == [
-        Event('User', 'Registered', 'JOE_ID', {'name': 'joe'}),
-        Event('User', 'Registered', 'JANE_ID', {'name': 'jane'}),
-        Event('User', 'Activated', 'JOE_ID', None),
+    assert [(e.name, e.entity_id, e.data, e.ts) for e in local_storage.events] == [
+        ('User.Registered', 'JOE_ID', {'name': 'joe'}, 'TS'),
+        ('User.Registered', 'JANE_ID', {'name': 'jane'}, 'TS'),
+        ('User.Activated', 'JOE_ID', None, 'TS'),
     ]
 
 
 def test_local__get_events(local_storage):
-    local_storage.append('User', 'Registered', 'JOE_ID', data={'name': 'joe'})
-    local_storage.append('User', 'Registered', 'JANE_ID', data={'name': 'jane'})
-    local_storage.append('User', 'Activated', 'JOE_ID')
+    local_storage.store('User.Registered', 'JOE_ID', {'name': 'joe'}, 'TS')
+    local_storage.store('User.Registered', 'JANE_ID', {'name': 'jane'}, 'TS')
+    local_storage.store('User.Activated', 'JOE_ID', {'name': 'joe'}, 'TS')
 
-    assert local_storage.get_events('JOE_ID') == [
-        Event('User', 'Registered', 'JOE_ID', {'name': 'joe'}),
-        Event('User', 'Activated', 'JOE_ID', None),
+    assert [(e.name, e.entity_id) for e in local_storage.get_events('JOE_ID')] == [
+        ('User.Registered', 'JOE_ID'),
+        ('User.Activated', 'JOE_ID'),
     ]
-    assert local_storage.get_events('JANE_ID') == [
-        Event('User', 'Registered', 'JANE_ID', {'name': 'jane'}),
+    assert [(e.name, e.entity_id) for e in local_storage.get_events('JANE_ID')] == [
+        ('User.Registered', 'JANE_ID'),
     ]
 
 

@@ -45,4 +45,5 @@ def from_model(instance):
         name=instance.name,
         entity_id=instance.entity_id,
         data=instance.data,
+        ts=instance.ts,
     )

@@ -1,40 +1,4 @@
-class EntityMetaclass(type):
-    def __new__(cls, name, bases, attrs):
-        newcls = super(EntityMetaclass, cls).__new__(cls, name, bases, attrs)
-        for attr, val in attrs.items():
-            if isinstance(val, Action):
-                val.entity_class = newcls
-                val.name = getattr(val, 'name') or attr
-
-        for attr, val in attrs.items():
-            if hasattr(val, 'mutator_for'):
-                if str(val.mutator_for) in newcls.mutators:
-                    msg = "Mutator for action %s is already registered for %s" % (val.mutator_for, newcls)
-                    raise RuntimeError(msg)
-                else:
-                    newcls.mutators[str(val.mutator_for)] = val
-
-        return newcls
-
-
-class Action:
-    entity_class = None
-
-    def __init__(self, name=None):
-        self.name = name
-
-    def __str__(self):
-        if self.entity_class:
-            return '%s.%s' % (self.entity_class.get_name(), self.name)
-        else:
-            return self.name
-
-    def __eq__(self, other):
-        return str(self) == str(other)
-
-
-class Entity(metaclass=EntityMetaclass):
-    Action = Action
+class Entity:
     mutators = {}
 
     def __init__(self, id):
@@ -45,15 +9,15 @@ class Entity(metaclass=EntityMetaclass):
         return '<%s: %s>' % (self.__class__.__name__, self.id)
 
     def mutate(self, event):
-        mutator = self.get_mutator(event.get_entity_action())
+        mutator = self.get_mutator(event.name)
         mutator(self, event.data)
         self.version += 1
 
-    def get_mutator(self, action):
+    def get_mutator(self, name):
         try:
-            return self.__class__.mutators[str(action)]
+            return self.__class__.mutators[name]
         except KeyError:
-            msg = '%s has no mutator function registered for action %r. ' % (self, action)
+            msg = '%s has no mutator function registered for event type %r. ' % (self, name)
             msg += 'Please register method using @entities.register_mutator decorator. '
             registered_actions = ', '.join(repr(a) for a in self.__class__.mutators)
             msg += 'Currently registered actions: %s' % (registered_actions or '-')
@@ -64,17 +28,14 @@ class Entity(metaclass=EntityMetaclass):
         return cls.__name__
 
 
-def register_mutator(action):
-    assert isinstance(action, Action), "register_mutator only with Entity.Action instance"
-    action_key = str(action)
-    action.entity_class.mutators
+def register_mutator(entity_class, event_name):
 
     def outer(method):
-        if action_key in action.entity_class.mutators:
-            msg = "Mutator for action %s is already registered for %s" % (action, action.entity_class)
+        if event_name in entity_class.mutators:
+            msg = "Mutator for action %s is already registered for %s" % (event_name, entity_class)
             raise RuntimeError(msg)
         else:
-            action.entity_class.mutators[action_key] = method
+            entity_class.mutators[event_name] = method
         return method
 
     return outer
@@ -96,12 +57,8 @@ class Repository:
             msg = "Repository must define entity. Please set %s.entity to Entity subclass"
             raise RuntimeError(msg % self)
 
-    def store(self, action, entity_id, data=None):
-        if isinstance(action, Action) and '.' in str(action):
-            entity_name, action = str(action).split('.', 1)
-        else:
-            entity_name = self.get_entity_name()
-        return self.storage.store(entity_name, action, entity_id, data)
+    def store(self, name, entity_id, data=None):
+        return self.storage.store(name, entity_id, data)
 
     def get_events(self, entity_id):
         return self.storage.get_events(entity_id)

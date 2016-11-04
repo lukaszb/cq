@@ -3,12 +3,6 @@ from ses.entities import register_mutator
 
 
 class User(Entity):
-    Registered = Entity.Action()
-    ActivatedWithToken = Entity.Action()
-    Activated = Entity.Action()
-    Inactivated = Entity.Action()
-    ObtainedAuthToken = Entity.Action()
-
     __slots__ = ('email', 'encoded_password', 'activation_token', 'is_active')
 
     def is_authenticated(self):
@@ -18,35 +12,35 @@ class User(Entity):
         return self.is_active
 
 
-@register_mutator(User.Registered)
-def mutate_registered(self, data):
-    self.email = data['email']
-    self.encoded_password = data['encoded_password']
-    self.activation_token = data['activation_token']
-    self.is_active = False
+@register_mutator(User, 'User.Registered')
+def mutate_registered(entity, data):
+    entity.email = data['email']
+    entity.encoded_password = data['encoded_password']
+    entity.activation_token = data['activation_token']
+    entity.is_active = False
 
 
-@register_mutator(User.ActivatedWithToken)
-def mutate_activated_with_token(self, data):
-    self.is_active = True
-    self.activation_token = None
+@register_mutator(User, 'User.ActivatedWithToken')
+def mutate_activated_with_token(entity, data):
+    entity.is_active = True
+    entity.activation_token = None
 
 
-@register_mutator(User.Activated)
-def mutate_activated(self, data):
-    self.is_active = True
-    self.activation_token = None
+@register_mutator(User, 'User.Activated')
+def mutate_activated(entity, data):
+    entity.is_active = True
+    entity.activation_token = None
 
 
-@register_mutator(User.Inactivated)
-def mutate_inactivated(self, data):
-    self.is_active = False
-    self.activation_token = None
+@register_mutator(User, 'User.Inactivated')
+def mutate_inactivated(entity, data):
+    entity.is_active = False
+    entity.activation_token = None
 
 
-@register_mutator(User.ObtainedAuthToken)
-def mutate_obtained_auth_token(self, data):
-    self.auth_token = data['auth_token']
+@register_mutator(User, 'User.ObtainedAuthToken')
+def mutate_obtained_auth_token(entity, data):
+    entity.auth_token = data['auth_token']
 
 
 def AnonymousUser():

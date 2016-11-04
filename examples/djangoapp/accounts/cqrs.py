@@ -20,7 +20,7 @@ class AccountsApp(EventSourcingApplication):
     def register(self, email, password):
         uuid = self.gen_uuid()
         self.storage.book_unique('user', email, entity_id=uuid)
-        return self.repo.store(User.Registered, uuid, data={
+        return self.repo.store('User.Registered', uuid, data={
             'email': email,
             'encoded_password': make_password(password),
             'activation_token': self.gen_uuid(),
@@ -30,24 +30,24 @@ class AccountsApp(EventSourcingApplication):
         user = get_entity_or_404(self.repo, user_id)
         assert not user.is_active
         assert user.activation_token == token
-        return self.repo.store(User.ActivatedWithToken, user_id)
+        return self.repo.store('User.ActivatedWithToken', user_id)
 
     def activate(self, user_id):
         user = get_entity_or_404(self.repo, user_id)
         assert not user.is_active
-        return self.repo.store(User.Activated, user_id)
+        return self.repo.store('User.Activated', user_id)
 
     def inactivate(self, user_id):
         user = get_entity_or_404(self.repo, user_id)
         assert user.is_active
-        return self.repo.store(User.Inactivated, user_id)
+        return self.repo.store('User.Inactivated', user_id)
 
     def obtain_auth_token(self, user_id):
         user = get_entity_or_404(self.repo, user_id)
         auth_token = self.gen_uuid()
         self.storage.book_unique('user_token', auth_token, entity_id=user_id)
         assert user.is_active is True, "User %s is inactive" % user.email
-        return self.repo.store(User.ObtainedAuthToken, user.id, data={'auth_token': auth_token})
+        return self.repo.store('User.ObtainedAuthToken', user.id, data={'auth_token': auth_token})
 
     def get_by_email(self, email):
         entity_id = self.storage.get_unique('user', email)

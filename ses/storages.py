@@ -1,10 +1,10 @@
 from collections import defaultdict
 from collections import namedtuple
 from ses.exceptions import SesError
+from ses.events import Event
 from ses.handlers import publish
 
 
-Event = namedtuple('Event', 'entity,action,entity_id,data')
 UniqueItem = namedtuple('UniqueItem', '')
 
 
@@ -15,12 +15,26 @@ class Storage:
     class DoesNotExist(SesError):
         pass
 
-    def store(self, entity, action, entity_id, data=None):
-        event = self.append(entity, action, entity_id, data)
+    def store(self, name, entity_id, data=None, ts=None):
+        event = self.create_event(
+            name=name,
+            entity_id=entity_id,
+            data=data,
+            ts=ts,
+        )
+        self.append(event)
         publish(event)
         return event
 
-    def append(self, entity, action, entity_id, data=None):
+    def create_event(self, name, entity_id, data=None, ts=None):
+        return Event(
+            name=name,
+            entity_id=entity_id,
+            data=data,
+            ts=ts,
+        )
+
+    def append(self, event):
         raise NotImplementedError
 
     def get_events(self, entity_id):
@@ -42,13 +56,7 @@ class LocalMemoryStorage(Storage):
         self.events = []
         self.uniques = defaultdict(dict)
 
-    def append(self, entity, action, entity_id, data=None):
-        event = Event(
-            entity=entity,
-            action=action,
-            entity_id=entity_id,
-            data=data,
-        )
+    def append(self, event):
         self.events.append(event)
         return event
 

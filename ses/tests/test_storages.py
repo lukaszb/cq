@@ -9,6 +9,7 @@ def local_storage():
     return LocalMemoryStorage()
 
 
+@mock.patch('ses.storages.genuuid', lambda: 'EVENT_ID')
 @mock.patch('ses.storages.publish')
 def test_store(publish):
     storage = Storage()
@@ -16,6 +17,7 @@ def test_store(publish):
          mock.patch.object(storage, 'append') as append:
         storage.store('User.Registered', 'aabbcc', {'name': 'joe'})
         create_event.assert_called_once_with(
+            id='EVENT_ID',
             name='User.Registered',
             entity_id='aabbcc',
             data={'name': 'joe'},

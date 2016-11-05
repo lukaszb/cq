@@ -1,9 +1,11 @@
 from django.db import models
 from django.utils import timezone
+from ses.genuuid import genuuid
 import jsonfield
 
 
 class Event(models.Model):
+    id = models.CharField(max_length=128, primary_key=True, default=genuuid)
     ts = models.DateTimeField(default=timezone.now)
     name = models.CharField(max_length=128, db_index=True)
     entity_id = models.CharField(max_length=128, db_index=True)

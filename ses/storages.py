@@ -2,6 +2,7 @@ from collections import defaultdict
 from collections import namedtuple
 from ses.exceptions import SesError
 from ses.events import Event
+from ses.genuuid import genuuid
 from ses.handlers import publish
 
 
@@ -17,6 +18,7 @@ class Storage:
 
     def store(self, name, entity_id, data=None, ts=None):
         event = self.create_event(
+            id=genuuid(),
             name=name,
             entity_id=entity_id,
             data=data,
@@ -26,8 +28,9 @@ class Storage:
         publish(event)
         return event
 
-    def create_event(self, name, entity_id, data=None, ts=None):
+    def create_event(self, id, name, entity_id, data=None, ts=None):
         return Event(
+            id=id,
             name=name,
             entity_id=entity_id,
             data=data,

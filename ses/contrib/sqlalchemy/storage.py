@@ -37,7 +37,7 @@ class SqlAlchemyStorage(Storage):
     def get_events(self, entity_id):
         session = self.get_session()
         # TODO: should be ordered by version, not ts (otoh ts should also work)
-        query = session.query(EventModel).order_by(EventModel.ts)
+        query = session.query(EventModel).filter(EventModel.entity_id==entity_id).order_by(EventModel.ts)
         return (from_model(e) for e in query)
 
     def book_unique(self, namespace, value, entity_id=None):

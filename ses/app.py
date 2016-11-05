@@ -1,7 +1,7 @@
 from ses.entities import Repository
 from ses import exceptions
+from ses import genuuid
 from ses import settings
-import uuid
 
 
 class EventSourcingApplication:
@@ -27,8 +27,8 @@ class EventSourcingApplication:
     def get_storage_kwargs(self):
         return self.storage_kwargs
 
-    def gen_uuid(self):
-        return uuid.uuid4().hex
+    def genuuid(self):
+        return genuuid.genuuid()
 
     def get_repo_for_entity(self, entity_class):
         name = '%sRepository' % entity_class

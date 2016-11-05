@@ -5,7 +5,7 @@ import pytest
 @pytest.mark.django_db
 def test_register(mocker):
     mocker.patch('accounts.cqrs.make_password', lambda p: 'encoded_s3cr3t')
-    mocker.patch.object(app, 'gen_uuid', lambda: 'ACTIVATION_TOKEN')
+    mocker.patch.object(app, 'genuuid', lambda: 'ACTIVATION_TOKEN')
     event = app.register(email='joe@doe.com', password='s3cr3t')
     assert event.data == {
         'email': 'joe@doe.com',
@@ -37,7 +37,7 @@ def test_obtain_auth_token(mocker):
     event = app.register(email='joe@doe.com', password='s3cr3t')
     app.activate(event.entity_id)
 
-    mocker.patch.object(app, 'gen_uuid', lambda: 'AUTH_TOKEN')
+    mocker.patch.object(app, 'genuuid', lambda: 'AUTH_TOKEN')
     event = app.obtain_auth_token(event.entity_id)
     assert event.data['auth_token'] == 'AUTH_TOKEN'
 

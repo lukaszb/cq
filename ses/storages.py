@@ -2,6 +2,7 @@ from collections import defaultdict
 from collections import namedtuple
 from ses.exceptions import SesError
 from ses.events import Event
+from ses.genuuid import genuuid
 from ses.handlers import publish
 
 

@@ -1,18 +1,14 @@
 from ses import settings
 from ses.events import Event
+from ses.genuuid import genuuid
 from ses.storages import Storage
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative.api import declarative_base
 import json
 import sqlalchemy
-import uuid
 
 
 Base = declarative_base()
-
-
-def genuuid():
-    return uuid.uuid4().hex
 
 
 class EventModel(Base):

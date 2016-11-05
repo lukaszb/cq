@@ -12,7 +12,7 @@ class TodoApp(EventSourcingApplication):
         self.repo = self.get_repo_for_entity(Todo)
 
     def add(self, name):
-        uuid = self.gen_uuid()
+        uuid = self.genuuid()
         return self.repo.store('Todo.Added', uuid, data={'name': name})
 
     def finish(self, todo_id):

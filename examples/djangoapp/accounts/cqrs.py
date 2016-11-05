@@ -18,12 +18,12 @@ class AccountsApp(EventSourcingApplication):
         self.repo = self.get_repo_for_entity(User)
 
     def register(self, email, password):
-        uuid = self.gen_uuid()
+        uuid = self.genuuid()
         self.storage.book_unique('user', email, entity_id=uuid)
         return self.repo.store('User.Registered', uuid, data={
             'email': email,
             'encoded_password': make_password(password),
-            'activation_token': self.gen_uuid(),
+            'activation_token': self.genuuid(),
         })
 
     def activate_with_token(self, user_id, token):
@@ -44,7 +44,7 @@ class AccountsApp(EventSourcingApplication):
 
     def obtain_auth_token(self, user_id):
         user = get_entity_or_404(self.repo, user_id)
-        auth_token = self.gen_uuid()
+        auth_token = self.genuuid()
         self.storage.book_unique('user_token', auth_token, entity_id=user_id)
         assert user.is_active is True, "User %s is inactive" % user.email
         return self.repo.store('User.ObtainedAuthToken', user.id, data={'auth_token': auth_token})

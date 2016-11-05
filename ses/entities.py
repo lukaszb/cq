@@ -10,7 +10,7 @@ class Entity:
 
     def mutate(self, event):
         mutator = self.get_mutator(event.name)
-        mutator(self, event.data)
+        mutator(self, event, event.data)
         self.version += 1
 
     def get_mutator(self, name):

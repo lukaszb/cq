@@ -13,7 +13,7 @@ class User(Entity):
 
 
 @register_mutator(User, 'User.Registered')
-def mutate_registered(entity, data):
+def mutate_registered(entity, event, data):
     entity.email = data['email']
     entity.encoded_password = data['encoded_password']
     entity.activation_token = data['activation_token']
@@ -21,25 +21,25 @@ def mutate_registered(entity, data):
 
 
 @register_mutator(User, 'User.ActivatedWithToken')
-def mutate_activated_with_token(entity, data):
+def mutate_activated_with_token(entity, event, data):
     entity.is_active = True
     entity.activation_token = None
 
 
 @register_mutator(User, 'User.Activated')
-def mutate_activated(entity, data):
+def mutate_activated(entity, event, data):
     entity.is_active = True
     entity.activation_token = None
 
 
 @register_mutator(User, 'User.Inactivated')
-def mutate_inactivated(entity, data):
+def mutate_inactivated(entity, event, data):
     entity.is_active = False
     entity.activation_token = None
 
 
 @register_mutator(User, 'User.ObtainedAuthToken')
-def mutate_obtained_auth_token(entity, data):
+def mutate_obtained_auth_token(entity, event, data):
     entity.auth_token = data['auth_token']
 
 

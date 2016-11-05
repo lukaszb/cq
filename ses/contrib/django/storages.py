@@ -13,7 +13,7 @@ class DjangoStorage(Storage):
         return obj
 
     def get_events(self, entity_id):
-        qs = EventModel.objects.filter(entity_id=entity_id).order_by('id')
+        qs = EventModel.objects.filter(entity_id=entity_id).order_by('ts')
         return (from_model(e) for e in qs)
 
     def book_unique(self, namespace, value, entity_id):
@@ -34,6 +34,7 @@ class DjangoStorage(Storage):
 
 def to_model(event):
     return EventModel(
+        id=event.id,
         name=event.name,
         entity_id=event.entity_id,
         data=event.data,
@@ -42,6 +43,7 @@ def to_model(event):
 
 def from_model(instance):
     return Event(
+        id=instance.id,
         name=instance.name,
         entity_id=instance.entity_id,
         data=instance.data,

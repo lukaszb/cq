@@ -1,7 +1,9 @@
 PYTHON ?= python3
 
 export VIRTUAL_ENV := $(realpath .)/venv
+export TOX_DIR := $(realpath .)/.tox
 export PATH := $(VIRTUAL_ENV)/bin:$(PATH)
+export DJANGO_MANAGE := $(TOX_DIR)/py35-d110/bin/python examples/djangoapp/manage.py
 unexport WORKON_HOME PIP_RESPECT_VIRTUALENV PIP_VIRTUALENV_BASE
 
 help:
@@ -53,3 +55,7 @@ test:
 
 tdd:
 	$(VIRTUAL_ENV)/bin/ptw -c -- ./api
+
+
+django_makemigrations:
+	$(DJANGO_MANAGE) makemigrations ses

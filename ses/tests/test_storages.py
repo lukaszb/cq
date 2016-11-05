@@ -1,5 +1,4 @@
 from ses.storages import LocalMemoryStorage
-from ses.storages import Event
 from ses.storages import Storage
 from unittest import mock
 import pytest

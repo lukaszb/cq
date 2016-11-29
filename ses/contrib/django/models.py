@@ -12,10 +12,7 @@ class Event(models.Model):
     data = jsonfield.JSONField(null=True)
 
     def __str__(self):
-        return '%s | %s | %s' % (self.action, self.entity_id, self.ts)
-
-    def get_entity_action(self):
-        return '%s.%s' % (self.entity, self.action)
+        return '%s | %s | %s' % (self.name, self.entity_id, self.ts)
 
 
 class UniqueItem(models.Model):

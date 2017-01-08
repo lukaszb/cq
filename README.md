@@ -1,4 +1,4 @@
-## Simple Event Sourcing
+## Command and Queries
 
 [![build-status-image]][travis]
 

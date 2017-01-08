@@ -18,7 +18,7 @@ setup(
     version='0.8',
     url='https://github.com/lukaszb/cq',
     license='MIT',
-    description='simple event sourcing implementation',
+    description='simple cqrs implementation',
     author='Lukasz Balcerzak',
     author_email='lukaszbalcerzak@gmail.com',
     zip_safe=False,

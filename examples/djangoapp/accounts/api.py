@@ -19,7 +19,7 @@ def register(request):
         email=serializer.validated_data['email'],
         password=serializer.validated_data['password'],
     )
-    return Response({'user_id': event.entity_id})
+    return Response({'user_id': event.aggregate_id})
 
 
 @api_view(['POST'])

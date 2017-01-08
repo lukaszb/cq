@@ -39,7 +39,7 @@ def test_no_auth(arf):
 
 @pytest.mark.django_db
 def test_auth_required(arf):
-    user_id = app.register('joe@doe.com', 'secret').entity_id
+    user_id = app.register('joe@doe.com', 'secret').aggregate_id
     app.activate(user_id)
     event = app.obtain_auth_token(user_id)
 
@@ -59,7 +59,7 @@ def test_auth_required(arf):
 
 @pytest.mark.django_db
 def test_auth_required_user_inactive(arf):
-    user_id = app.register('joe@doe.com', 'secret').entity_id
+    user_id = app.register('joe@doe.com', 'secret').aggregate_id
     app.activate(user_id)
     event = app.obtain_auth_token(user_id)
     app.inactivate(user_id)

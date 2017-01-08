@@ -1,9 +1,9 @@
+from .exceptions import SesError
+from .events import Event
+from .genuuid import genuuid
+from .handlers import publish
 from collections import defaultdict
 from collections import namedtuple
-from ses.exceptions import SesError
-from ses.events import Event
-from ses.genuuid import genuuid
-from ses.handlers import publish
 
 
 UniqueItem = namedtuple('UniqueItem', '')
@@ -16,11 +16,11 @@ class Storage:
     class DoesNotExist(SesError):
         pass
 
-    def store(self, name, entity_id, data=None, ts=None):
+    def store(self, name, aggregate_id, data=None, ts=None):
         event = self.create_event(
             id=genuuid(),
             name=name,
-            entity_id=entity_id,
+            aggregate_id=aggregate_id,
             data=data,
             ts=ts,
         )
@@ -28,11 +28,11 @@ class Storage:
         publish(event)
         return event
 
-    def create_event(self, id, name, entity_id, data=None, ts=None):
+    def create_event(self, id, name, aggregate_id, data=None, ts=None):
         return Event(
             id=id,
             name=name,
-            entity_id=entity_id,
+            aggregate_id=aggregate_id,
             data=data,
             ts=ts,
         )
@@ -40,10 +40,10 @@ class Storage:
     def append(self, event):
         raise NotImplementedError
 
-    def get_events(self, entity_id):
+    def get_events(self, aggregate_id):
         raise NotImplementedError
 
-    def book_unique(self, namespace, value, entity_id=None):
+    def book_unique(self, namespace, value, aggregate_id=None):
         raise NotImplementedError
 
     def get_unique(self, namespace, value):
@@ -63,14 +63,14 @@ class LocalMemoryStorage(Storage):
         self.events.append(event)
         return event
 
-    def get_events(self, entity_id):
-        return [e for e in self.events if e.entity_id == entity_id]
+    def get_events(self, aggregate_id):
+        return [e for e in self.events if e.aggregate_id == aggregate_id]
 
-    def book_unique(self, namespace, value, entity_id=None):
+    def book_unique(self, namespace, value, aggregate_id=None):
         if value in self.uniques[namespace]:
             raise Storage.DuplicatedItemError('%s:%s already exists' % (namespace, value))
         else:
-            self.uniques[namespace][value] = entity_id
+            self.uniques[namespace][value] = aggregate_id
 
     def get_unique(self, namespace, value):
         if value in self.uniques[namespace]:

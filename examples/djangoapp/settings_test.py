@@ -8,8 +8,8 @@ SECRET_KEY = ''.join([random.choice(string.ascii_letters) for x in range(40)])
 
 
 INSTALLED_APPS = (
-    'ses.contrib.django.apps.SimpleEventSourcingApp',
-    # 'ses',
+    'cq.contrib.django.apps.SimpleEventSourcingApp',
+    # 'cq',
     'accounts',
 )
 
@@ -49,5 +49,5 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ),
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
-    'UNAUTHENTICATED_USER': 'accounts.entities.AnonymousUser',
+    'UNAUTHENTICATED_USER': 'accounts.aggregates.AnonymousUser',
 }

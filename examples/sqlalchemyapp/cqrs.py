@@ -1,26 +1,26 @@
-from .entities import Todo
-from ses.app import EventSourcingApplication
-from ses.contrib.sqlalchemy.storage import SqlAlchemyStorage
+from .aggregates import Todo
+from cq.app import BaseApp
+from cq.contrib.sqlalchemy.storage import SqlAlchemyStorage
 
 
-class TodoApp(EventSourcingApplication):
+class TodoApp(BaseApp):
     storage_class = SqlAlchemyStorage
     storage_kwargs = {'db_uri': 'sqlite:///:memory:'}
 
     def __init__(self):
         super().__init__()
-        self.repo = self.get_repo_for_entity(Todo)
+        self.repo = self.get_repo_for_aggregate(Todo)
 
     def add(self, name):
         uuid = self.genuuid()
         return self.repo.store('Todo.Added', uuid, data={'name': name})
 
     def finish(self, todo_id):
-        self.repo.get_entity(todo_id)
+        self.repo.get_aggregate(todo_id)
         self.repo.store('Todo.Finished', todo_id)
 
     def reopen(self, todo_id):
-        self.repo.get_entity(todo_id)
+        self.repo.get_aggregate(todo_id)
         self.repo.store('Todo.Reopened', todo_id)
 
 

@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 import django.utils.timezone
 import jsonfield.fields
-import ses.genuuid
+import cq.genuuid
 
 
 class Migration(migrations.Migration):
@@ -19,10 +19,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Event',
             fields=[
-                ('id', models.CharField(default=ses.genuuid.genuuid, max_length=128, primary_key=True, serialize=False)),
+                ('id', models.CharField(default=cq.genuuid.genuuid, max_length=128, primary_key=True, serialize=False)),
                 ('ts', models.DateTimeField(default=django.utils.timezone.now)),
                 ('name', models.CharField(db_index=True, max_length=128)),
-                ('entity_id', models.CharField(db_index=True, max_length=128)),
+                ('aggregate_id', models.CharField(db_index=True, max_length=128)),
                 ('data', jsonfield.fields.JSONField(null=True)),
             ],
         ),
@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('namespace', models.CharField(max_length=128)),
                 ('value', models.CharField(max_length=255)),
-                ('entity_id', models.CharField(max_length=128)),
+                ('aggregate_id', models.CharField(max_length=128)),
             ],
         ),
         migrations.AlterUniqueTogether(

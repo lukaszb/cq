@@ -19,7 +19,7 @@ def test_store(publish):
         create_event.assert_called_once_with(
             id='EVENT_ID',
             name='User.Registered',
-            entity_id='aabbcc',
+            aggregate_id='aabbcc',
             data={'name': 'joe'},
             ts=None,
         )
@@ -32,7 +32,7 @@ def test_local__append(local_storage):
     local_storage.store('User.Registered', 'JANE_ID', {'name': 'jane'}, 'TS')
     local_storage.store('User.Activated', 'JOE_ID', ts='TS')
 
-    assert [(e.name, e.entity_id, e.data, e.ts) for e in local_storage.events] == [
+    assert [(e.name, e.aggregate_id, e.data, e.ts) for e in local_storage.events] == [
         ('User.Registered', 'JOE_ID', {'name': 'joe'}, 'TS'),
         ('User.Registered', 'JANE_ID', {'name': 'jane'}, 'TS'),
         ('User.Activated', 'JOE_ID', None, 'TS'),
@@ -44,11 +44,11 @@ def test_local__get_events(local_storage):
     local_storage.store('User.Registered', 'JANE_ID', {'name': 'jane'}, 'TS')
     local_storage.store('User.Activated', 'JOE_ID', {'name': 'joe'}, 'TS')
 
-    assert [(e.name, e.entity_id) for e in local_storage.get_events('JOE_ID')] == [
+    assert [(e.name, e.aggregate_id) for e in local_storage.get_events('JOE_ID')] == [
         ('User.Registered', 'JOE_ID'),
         ('User.Activated', 'JOE_ID'),
     ]
-    assert [(e.name, e.entity_id) for e in local_storage.get_events('JANE_ID')] == [
+    assert [(e.name, e.aggregate_id) for e in local_storage.get_events('JANE_ID')] == [
         ('User.Registered', 'JANE_ID'),
     ]
 

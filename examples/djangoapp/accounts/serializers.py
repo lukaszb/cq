@@ -1,8 +1,8 @@
 from accounts.cqrs import app
 from accounts.models import User
+from cq.contrib.django.shortcuts import get_aggregate_or_404
 from django.contrib.auth.hashers import check_password
 from rest_framework import serializers
-from cq.contrib.django.shortcuts import get_entity_or_404
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -50,7 +50,7 @@ class AccountActivationSerializer(serializers.Serializer):
         self.user_id = user_id
 
     def validate_token(self, value):
-        user = get_entity_or_404(app.repo, self.user_id)
+        user = get_aggregate_or_404(app.repo, self.user_id)
         if value != user.activation_token:
             raise serializers.ValidationError("Wrong activation token")
         if user.is_active:

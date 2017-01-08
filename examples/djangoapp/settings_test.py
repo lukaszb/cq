@@ -49,5 +49,5 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ),
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
-    'UNAUTHENTICATED_USER': 'accounts.entities.AnonymousUser',
+    'UNAUTHENTICATED_USER': 'accounts.aggregates.AnonymousUser',
 }

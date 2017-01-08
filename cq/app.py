@@ -1,7 +1,7 @@
 from . import exceptions
 from . import genuuid
 from . import settings
-from .entities import Repository
+from .aggregates import Repository
 
 
 class EventSourcingApplication:
@@ -30,7 +30,7 @@ class EventSourcingApplication:
     def genuuid(self):
         return genuuid.genuuid()
 
-    def get_repo_for_entity(self, entity_class):
-        name = '%sRepository' % entity_class
-        repo_class = type(name, (Repository,), {'entity_class': entity_class})
+    def get_repo_for_aggregate(self, aggregate_class):
+        name = '%sRepository' % aggregate_class
+        repo_class = type(name, (Repository,), {'aggregate_class': aggregate_class})
         return repo_class(storage=self.storage)

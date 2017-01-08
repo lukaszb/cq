@@ -16,7 +16,7 @@ class EventModel(Base):
 
     id = sqlalchemy.Column(sqlalchemy.String(128), primary_key=True, default=genuuid)
     name = sqlalchemy.Column(sqlalchemy.String(255), index=True)
-    entity_id = sqlalchemy.Column(sqlalchemy.String(255), index=True)
+    aggregate_id = sqlalchemy.Column(sqlalchemy.String(255), index=True)
     data = sqlalchemy.Column(sqlalchemy.Text(), default='{}')
     ts = sqlalchemy.Column(sqlalchemy.DateTime(), index=True)
 
@@ -34,13 +34,13 @@ class SqlAlchemyStorage(Storage):
         session.commit()
         return obj
 
-    def get_events(self, entity_id):
+    def get_events(self, aggregate_id):
         session = self.get_session()
         # TODO: should be ordered by version, not ts (otoh ts should also work)
-        query = session.query(EventModel).filter(EventModel.entity_id==entity_id).order_by(EventModel.ts)
+        query = session.query(EventModel).filter(EventModel.aggregate_id==aggregate_id).order_by(EventModel.ts)
         return (from_model(e) for e in query)
 
-    def book_unique(self, namespace, value, entity_id=None):
+    def book_unique(self, namespace, value, aggregate_id=None):
         raise NotImplementedError
 
     def get_unique(self, namespace, value):
@@ -79,7 +79,7 @@ def to_model(event):
     return EventModel(
         id=event.id,
         name=event.name,
-        entity_id=event.entity_id,
+        aggregate_id=event.aggregate_id,
         data=json.dumps(event.data),
     )
 
@@ -88,7 +88,7 @@ def from_model(instance):
     return Event(
         id=instance.id,
         name=instance.name,
-        entity_id=instance.entity_id,
+        aggregate_id=instance.aggregate_id,
         data=json.loads(instance.data),
         ts=instance.ts,
     )

@@ -8,7 +8,7 @@ def register_handler(event_name):
     def wrap(handler):
         handlers_registry[event_name].add(handler)
 
-        def inner(event, entity):
+        def inner(event, aggregate):
             return
         return handler
 

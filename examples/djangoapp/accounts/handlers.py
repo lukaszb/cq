@@ -5,7 +5,7 @@ from cq.handlers import register_handler
 @register_handler('User.Registered')
 def handle_registered_user(event):
     UserProjection.objects.create(
-        id=event.entity_id,
+        id=event.aggregate_id,
         email=event.data['email'],
         registered_at=event.ts,
     )

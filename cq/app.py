@@ -4,7 +4,7 @@ from . import settings
 from .aggregates import Repository
 
 
-class EventSourcingApplication:
+class BaseApp:
     storage_class = None
     storage_kwargs = {}
 

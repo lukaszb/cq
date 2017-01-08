@@ -1,9 +1,9 @@
 from .aggregates import Todo
-from cq.app import EventSourcingApplication
+from cq.app import BaseApp
 from cq.contrib.sqlalchemy.storage import SqlAlchemyStorage
 
 
-class TodoApp(EventSourcingApplication):
+class TodoApp(BaseApp):
     storage_class = SqlAlchemyStorage
     storage_kwargs = {'db_uri': 'sqlite:///:memory:'}
 

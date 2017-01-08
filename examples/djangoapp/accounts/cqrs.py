@@ -1,7 +1,7 @@
 from .aggregates import User
 from django.contrib.auth.hashers import make_password
 from django.http import Http404
-from cq.app import EventSourcingApplication
+from cq.app import BaseApp
 from cq.exceptions import SesError
 from cq.contrib.django.shortcuts import get_aggregate_or_404
 
@@ -10,7 +10,7 @@ class WrongPassword(SesError):
     pass
 
 
-class AccountsApp(EventSourcingApplication):
+class AccountsApp(BaseApp):
     WrongPassword = WrongPassword
 
     def __init__(self):

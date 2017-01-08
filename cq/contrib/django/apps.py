@@ -5,8 +5,8 @@ import os.path
 
 
 class SimpleEventSourcingApp(AppConfig):
-    name = 'ses.contrib.django'
-    label = 'ses'
+    name = 'cq.contrib.django'
+    label = 'cq'
     verbose_name = 'Simple Event Store App'
 
     def ready(self):

@@ -1,6 +1,6 @@
 from .entities import Todo
-from ses.app import EventSourcingApplication
-from ses.contrib.sqlalchemy.storage import SqlAlchemyStorage
+from cq.app import EventSourcingApplication
+from cq.contrib.sqlalchemy.storage import SqlAlchemyStorage
 
 
 class TodoApp(EventSourcingApplication):

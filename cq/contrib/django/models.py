@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from ses.genuuid import genuuid
+from cq.genuuid import genuuid
 import jsonfield
 
 

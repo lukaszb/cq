@@ -1,9 +1,9 @@
 from .entities import User
 from django.contrib.auth.hashers import make_password
 from django.http import Http404
-from ses.app import EventSourcingApplication
-from ses.exceptions import SesError
-from ses.contrib.django.shortcuts import get_entity_or_404
+from cq.app import EventSourcingApplication
+from cq.exceptions import SesError
+from cq.contrib.django.shortcuts import get_entity_or_404
 
 
 class WrongPassword(SesError):

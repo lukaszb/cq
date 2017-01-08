@@ -58,4 +58,4 @@ tdd:
 
 
 django_makemigrations:
-	$(DJANGO_MANAGE) makemigrations ses
+	$(DJANGO_MANAGE) makemigrations cq

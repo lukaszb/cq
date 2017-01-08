@@ -1,7 +1,7 @@
-from ses import settings
-from ses.events import Event
-from ses.genuuid import genuuid
-from ses.storages import Storage
+from cq import settings
+from cq.events import Event
+from cq.genuuid import genuuid
+from cq.storages import Storage
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative.api import declarative_base
 import json
@@ -12,7 +12,7 @@ Base = declarative_base()
 
 
 class EventModel(Base):
-    __tablename__ = 'ses_event'
+    __tablename__ = 'cq_event'
 
     id = sqlalchemy.Column(sqlalchemy.String(128), primary_key=True, default=genuuid)
     name = sqlalchemy.Column(sqlalchemy.String(255), index=True)

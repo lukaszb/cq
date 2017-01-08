@@ -1,7 +1,7 @@
-from ses.entities import Repository
-from ses import exceptions
-from ses import genuuid
-from ses import settings
+from . import exceptions
+from . import genuuid
+from . import settings
+from .entities import Repository
 
 
 class EventSourcingApplication:

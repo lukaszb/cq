@@ -14,15 +14,15 @@ def get_packages(top):
 
 
 setup(
-    name='ses',
+    name='cq',
     version='0.8',
-    url='https://github.com/lukaszb/ses',
+    url='https://github.com/lukaszb/cq',
     license='MIT',
     description='simple event sourcing implementation',
     author='Lukasz Balcerzak',
     author_email='lukaszbalcerzak@gmail.com',
     zip_safe=False,
-    packages=get_packages('ses'),
+    packages=get_packages('cq'),
     include_package_data=True,
     install_requires=[
         'jsonfield',

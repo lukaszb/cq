@@ -1,8 +1,8 @@
+from cq.contrib.django.models import Event as EventModel
+from cq.contrib.django.models import UniqueItem
+from cq.events import Event
+from cq.storages import Storage
 from django.db import IntegrityError
-from ses.contrib.django.models import Event as EventModel
-from ses.contrib.django.models import UniqueItem
-from ses.events import Event
-from ses.storages import Storage
 
 
 class DjangoStorage(Storage):

@@ -1,5 +1,5 @@
-from ses.entities import Entity
-from ses.entities import register_mutator
+from cq.entities import Entity
+from cq.entities import register_mutator
 
 
 class User(Entity):

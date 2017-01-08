@@ -1,4 +1,4 @@
-from ses import entities
+from cq import entities
 
 
 class Todo(entities.Entity):

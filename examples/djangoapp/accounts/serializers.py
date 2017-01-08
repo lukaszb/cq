@@ -2,7 +2,7 @@ from accounts.cqrs import app
 from accounts.models import User
 from django.contrib.auth.hashers import check_password
 from rest_framework import serializers
-from ses.contrib.django.shortcuts import get_entity_or_404
+from cq.contrib.django.shortcuts import get_entity_or_404
 
 
 class RegisterSerializer(serializers.Serializer):

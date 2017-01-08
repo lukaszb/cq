@@ -13,5 +13,5 @@ For now please refer to examples.
 - https://www.youtube.com/watch?v=JHGkaShoyNs
 
 
-[build-status-image]: https://secure.travis-ci.org/lukaszb/ses.svg?branch=master
-[travis]: http://travis-ci.org/lukaszb/ses
+[build-status-image]: https://secure.travis-ci.org/lukaszb/cq.svg?branch=master
+[travis]: http://travis-ci.org/lukaszb/cq

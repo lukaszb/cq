@@ -1,5 +1,5 @@
 from .models import User as UserProjection
-from ses.handlers import register_handler
+from cq.handlers import register_handler
 
 
 @register_handler('User.Registered')

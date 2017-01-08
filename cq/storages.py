@@ -1,9 +1,9 @@
+from .exceptions import SesError
+from .events import Event
+from .genuuid import genuuid
+from .handlers import publish
 from collections import defaultdict
 from collections import namedtuple
-from ses.exceptions import SesError
-from ses.events import Event
-from ses.genuuid import genuuid
-from ses.handlers import publish
 
 
 UniqueItem = namedtuple('UniqueItem', '')

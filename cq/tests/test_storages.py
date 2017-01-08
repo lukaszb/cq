@@ -1,5 +1,5 @@
-from ses.storages import LocalMemoryStorage
-from ses.storages import Storage
+from ..storages import LocalMemoryStorage
+from ..storages import Storage
 from unittest import mock
 import pytest
 
@@ -9,8 +9,8 @@ def local_storage():
     return LocalMemoryStorage()
 
 
-@mock.patch('ses.storages.genuuid', lambda: 'EVENT_ID')
-@mock.patch('ses.storages.publish')
+@mock.patch('cq.storages.genuuid', lambda: 'EVENT_ID')
+@mock.patch('cq.storages.publish')
 def test_store(publish):
     storage = Storage()
     with mock.patch.object(storage, 'create_event', return_value='EVENT') as create_event,\

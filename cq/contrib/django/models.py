@@ -12,10 +12,7 @@ class Event(models.Model):
     data = jsonfield.JSONField(null=True)
 
     def __str__(self):
-        return '%s | %s | %s' % (self.action, self.aggregate_id, self.ts)
-
-    def get_aggregate_action(self):
-        return '%s.%s' % (self.aggregate, self.action)
+        return '%s | %s | %s' % (self.name, self.aggregate_id, self.ts)
 
 
 class UniqueItem(models.Model):

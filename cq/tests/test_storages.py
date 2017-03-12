@@ -1,5 +1,8 @@
+from ..genuuid import genuuid
 from ..storages import LocalMemoryStorage
 from ..storages import Storage
+from datetime import datetime
+from pyrsistent import PRecord, field
 from unittest import mock
 import pytest
 
@@ -28,21 +31,25 @@ def test_store(publish):
 
 
 def test_local__append(local_storage):
-    local_storage.store('User.Registered', 'JOE_ID', {'name': 'joe'}, 'TS')
-    local_storage.store('User.Registered', 'JANE_ID', {'name': 'jane'}, 'TS')
-    local_storage.store('User.Activated', 'JOE_ID', ts='TS')
+    ts = datetime.utcnow()
+
+    local_storage.store('User.Registered', 'JOE_ID', {'name': 'joe'}, ts)
+    local_storage.store('User.Registered', 'JANE_ID', {'name': 'jane'}, ts)
+    local_storage.store('User.Activated', 'JOE_ID', ts=ts)
 
     assert [(e.name, e.aggregate_id, e.data, e.ts) for e in local_storage.events] == [
-        ('User.Registered', 'JOE_ID', {'name': 'joe'}, 'TS'),
-        ('User.Registered', 'JANE_ID', {'name': 'jane'}, 'TS'),
-        ('User.Activated', 'JOE_ID', None, 'TS'),
+        ('User.Registered', 'JOE_ID', {'name': 'joe'}, ts),
+        ('User.Registered', 'JANE_ID', {'name': 'jane'}, ts),
+        ('User.Activated', 'JOE_ID', None, ts),
     ]
 
 
 def test_local__get_events(local_storage):
-    local_storage.store('User.Registered', 'JOE_ID', {'name': 'joe'}, 'TS')
-    local_storage.store('User.Registered', 'JANE_ID', {'name': 'jane'}, 'TS')
-    local_storage.store('User.Activated', 'JOE_ID', {'name': 'joe'}, 'TS')
+    ts = datetime.utcnow()
+
+    local_storage.store('User.Registered', 'JOE_ID', {'name': 'joe'}, ts)
+    local_storage.store('User.Registered', 'JANE_ID', {'name': 'jane'}, ts)
+    local_storage.store('User.Activated', 'JOE_ID', {'name': 'joe'}, ts)
 
     assert [(e.name, e.aggregate_id) for e in local_storage.get_events('JOE_ID')] == [
         ('User.Registered', 'JOE_ID'),

@@ -1,5 +1,8 @@
 .tox
+.coverage
+.cache
 venv
+cq.egg-info
 *.pyc
 *.log
 *.bak

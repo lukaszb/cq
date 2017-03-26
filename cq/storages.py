@@ -40,7 +40,7 @@ class Storage:
     def append(self, event):
         raise NotImplementedError
 
-    def get_events(self, aggregate_id):
+    def get_events(self, name, aggregate_id):
         raise NotImplementedError
 
     def book_unique(self, namespace, value, aggregate_id=None):
@@ -63,8 +63,9 @@ class LocalMemoryStorage(Storage):
         self.events.append(event)
         return event
 
-    def get_events(self, aggregate_id):
-        return [e for e in self.events if e.aggregate_id == aggregate_id]
+    def get_events(self, aggregate_type, aggregate_id):
+        return [e for e in self.events if e.aggregate_id == aggregate_id
+                and e.name.startswith(aggregate_type)]
 
     def book_unique(self, namespace, value, aggregate_id=None):
         if value in self.uniques[namespace]:

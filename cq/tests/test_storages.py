@@ -44,12 +44,29 @@ def test_local__get_events(local_storage):
     local_storage.store('User.Registered', 'JANE_ID', {'name': 'jane'}, 'TS')
     local_storage.store('User.Activated', 'JOE_ID', {'name': 'joe'}, 'TS')
 
-    assert [(e.name, e.aggregate_id) for e in local_storage.get_events('JOE_ID')] == [
+    assert [(e.name, e.aggregate_id) for e in local_storage.get_events('User', 'JOE_ID')] == [
         ('User.Registered', 'JOE_ID'),
         ('User.Activated', 'JOE_ID'),
     ]
-    assert [(e.name, e.aggregate_id) for e in local_storage.get_events('JANE_ID')] == [
+    assert [(e.name, e.aggregate_id) for e in local_storage.get_events('User', 'JANE_ID')] == [
         ('User.Registered', 'JANE_ID'),
+    ]
+
+
+def test_local__get_events_with_same_aggregate_id_among_various_event_types(local_storage):
+    local_storage.store('User.Registered', 'JOE_ID', {'name': 'joe'}, 'TS')
+    local_storage.store('User.Activated', 'JOE_ID', {'name': 'joe'}, 'TS')
+    local_storage.store('User.Registered', 'JANE_ID', {'name': 'jane'}, 'TS')
+    local_storage.store('Project.Follows', 'JOE_ID', {'project_id': 'PROJECT1_ID'}, 'TS')
+    local_storage.store('Project.Follows', 'JOE_ID', {'project_id': 'PROJECT2_ID'}, 'TS')
+
+    assert [(e.name, e.aggregate_id) for e in local_storage.get_events('User', 'JOE_ID')] == [
+        ('User.Registered', 'JOE_ID'),
+        ('User.Activated', 'JOE_ID'),
+    ]
+    assert [(e.name, e.aggregate_id) for e in local_storage.get_events('Project', 'JOE_ID')] == [
+        ('Project.Follows', 'JOE_ID'),
+        ('Project.Follows', 'JOE_ID'),
     ]
 
 

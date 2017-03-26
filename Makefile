@@ -51,10 +51,10 @@ $(_install__virtualenv):
 
 
 test:
-	$(VIRTUAL_ENV)/bin/py.test ./api
+	$(VIRTUAL_ENV)/bin/py.test ./cq
 
 tdd:
-	$(VIRTUAL_ENV)/bin/ptw -c -- ./api
+	$(VIRTUAL_ENV)/bin/ptw -c -- ./cq
 
 
 django_makemigrations:

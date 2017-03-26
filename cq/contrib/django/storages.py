@@ -12,8 +12,10 @@ class DjangoStorage(Storage):
         obj.save()
         return obj
 
-    def get_events(self, aggregate_id):
-        qs = EventModel.objects.filter(aggregate_id=aggregate_id).order_by('ts')
+    def get_events(self, aggregate_type, aggregate_id):
+        type_prefix = aggregate_type + '.'
+        qs = EventModel.objects.filter(aggregate_id=aggregate_id, name__startswith=type_prefix)
+        qs = qs.order_by('ts')
         return (from_model(e) for e in qs)
 
     def book_unique(self, namespace, value, aggregate_id):

@@ -61,7 +61,7 @@ class Repository:
         return self.storage.store(name, aggregate_id, data)
 
     def get_events(self, aggregate_id):
-        return self.storage.get_events(aggregate_id)
+        return self.storage.get_events(self.get_aggregate_name(), aggregate_id)
 
     def get_aggregate(self, aggregate_id):
         aggregate = self.aggregate_class(aggregate_id)

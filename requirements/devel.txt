@@ -8,4 +8,5 @@ pytest-mock==1.2
 pytest-watch==4.1.0
 pytest==3.0.3
 python-dateutil==2.5.3
+tox==2.7.0
 watchdog==0.8.3

@@ -34,10 +34,14 @@ class SqlAlchemyStorage(Storage):
         session.commit()
         return obj
 
-    def get_events(self, aggregate_id):
+    def get_events(self, aggregate_type, aggregate_id):
+        sql_like = '{}.%'.format(aggregate_type)
         session = self.get_session()
         # TODO: should be ordered by version, not ts (otoh ts should also work)
-        query = session.query(EventModel).filter(EventModel.aggregate_id==aggregate_id).order_by(EventModel.ts)
+        query = session.query(EventModel).filter(
+            EventModel.aggregate_id == aggregate_id,
+            EventModel.name.like(sql_like),
+        ).order_by(EventModel.ts)
         return (from_model(e) for e in query)
 
     def book_unique(self, namespace, value, aggregate_id=None):

@@ -1,3 +1,4 @@
+from cq.contrib.sqlalchemy.storage import SqlAlchemyStorage
 from sqlalchemyapp.cqrs import TodoApp
 import pytest
 
@@ -5,6 +6,10 @@ import pytest
 @pytest.fixture
 def app():
     return TodoApp()
+
+
+def test_storage(app):
+    assert isinstance(app.storage, SqlAlchemyStorage)
 
 
 def test_add(app):

@@ -10,6 +10,7 @@ env:
     - TOX_ENV=py36-sqla
     - TOX_ENV=py36-d109
     - TOX_ENV=py36-d110
+    - TOX_ENV=py36-d111
 
 matrix:
     fast_finish: true

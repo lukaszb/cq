@@ -15,6 +15,7 @@ help:
 	@echo '  make clean'
 	@echo '  make test'
 	@echo '  make tdd'
+	@echo '  make django_makemigrations'
 
 
 # Top-level phony targets

@@ -7,8 +7,9 @@ import jsonfield
 class Event(models.Model):
     id = models.CharField(max_length=128, primary_key=True, default=genuuid)
     ts = models.DateTimeField(default=timezone.now, db_index=True)
-    name = models.CharField(max_length=128, db_index=True)
     aggregate_id = models.CharField(max_length=128, db_index=True)
+    aggregate_type = models.CharField(max_length=128, db_index=True)
+    name = models.CharField(max_length=128, db_index=True)
     data = jsonfield.JSONField(null=True)
 
     def __str__(self):

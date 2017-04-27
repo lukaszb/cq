@@ -16,9 +16,10 @@ class Storage:
     class DoesNotExist(SesError):
         pass
 
-    def store(self, name, aggregate_id, data=None, ts=None):
+    def store(self, aggregate_type, name, aggregate_id, data=None, ts=None):
         event = self.create_event(
             id=genuuid(),
+            aggregate_type=aggregate_type,
             name=name,
             aggregate_id=aggregate_id,
             data=data,
@@ -28,9 +29,10 @@ class Storage:
         publish(event)
         return event
 
-    def create_event(self, id, name, aggregate_id, data=None, ts=None):
+    def create_event(self, id, aggregate_type, name, aggregate_id, data=None, ts=None):
         return Event(
             id=id,
+            aggregate_type=aggregate_type,
             name=name,
             aggregate_id=aggregate_id,
             data=data,

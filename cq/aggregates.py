@@ -3,7 +3,7 @@ class Aggregate:
 
     def __init__(self, id):
         self.id = id
-        self.version = 1
+        self.version = 0
 
     def __repr__(self):
         return '<%s: %s>' % (self.__class__.__name__, self.id)

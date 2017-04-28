@@ -47,13 +47,13 @@ def test_get_events(app):
 
     todo_1_events = [(e.aggregate_id, e.name) for e in app.repo.get_events(todo_id_1)]
     assert todo_1_events == [
-        (todo_id_1, 'Todo.Added'),
-        (todo_id_1, 'Todo.Finished'),
-        (todo_id_1, 'Todo.Reopened'),
+        (todo_id_1, 'Added'),
+        (todo_id_1, 'Finished'),
+        (todo_id_1, 'Reopened'),
     ]
 
     todo_2_events = [(e.aggregate_id, e.name) for e in app.repo.get_events(todo_id_2)]
     assert todo_2_events == [
-        (todo_id_2, 'Todo.Added'),
-        (todo_id_2, 'Todo.Finished'),
+        (todo_id_2, 'Added'),
+        (todo_id_2, 'Finished'),
     ]

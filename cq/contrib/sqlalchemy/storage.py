@@ -83,6 +83,7 @@ def to_model(event):
     return EventModel(
         id=event.id,
         name=event.name,
+        aggregate_type=event.aggregate_type,
         aggregate_id=event.aggregate_id,
         data=json.dumps(event.data),
     )
@@ -91,6 +92,7 @@ def to_model(event):
 def from_model(instance):
     return Event(
         id=instance.id,
+        aggregate_type=instance.aggregate_type,
         name=instance.name,
         aggregate_id=instance.aggregate_id,
         data=json.loads(instance.data),

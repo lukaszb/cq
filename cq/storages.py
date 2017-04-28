@@ -66,8 +66,8 @@ class LocalMemoryStorage(Storage):
         return event
 
     def get_events(self, aggregate_type, aggregate_id):
-        return [e for e in self.events if e.aggregate_id == aggregate_id
-                and e.name.startswith(aggregate_type)]
+        return [e for e in self.events
+                if e.aggregate_id == aggregate_id and e.aggregate_type == aggregate_type]
 
     def book_unique(self, namespace, value, aggregate_id=None):
         if value in self.uniques[namespace]:

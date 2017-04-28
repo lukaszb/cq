@@ -4,7 +4,7 @@ import os
 
 DEFAULT_STORAGE_CLASS = import_string('cq.storages.LocalMemoryStorage')
 DB_URI = os.environ.get('DB_URI')
-ENGINE_ECHO = 'SES_SQLALCHEMY_ENGINE_ECHO' in os.environ
+ENGINE_ECHO = 'CQ_SQLALCHEMY_ENGINE_ECHO' in os.environ
 
 
 # if Django is configured default storage would be Django specific one
@@ -13,7 +13,7 @@ ENGINE_ECHO = 'SES_SQLALCHEMY_ENGINE_ECHO' in os.environ
 try:
     from django.conf import settings
     if settings.configured:
-        cls = getattr(settings, 'SES_DEFAULT_STORAGE_CLASS',
+        cls = getattr(settings, 'CQ_DEFAULT_STORAGE_CLASS',
                       'cq.contrib.django.storages.DjangoStorage')
         DEFAULT_STORAGE_CLASS = import_string(cls)
 except ImportError:

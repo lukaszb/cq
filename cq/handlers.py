@@ -15,7 +15,7 @@ def register_handler(aggregate_type, event_name):
     return wrap
 
 
-def publish(event):
+def handle_event(event):
     for handler in get_handlers(event):
         handler(event)
 

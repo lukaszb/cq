@@ -58,10 +58,15 @@ class Repository:
             raise RuntimeError(msg % self)
 
     def store(self, name, aggregate_id, data=None):
-        return self.storage.store(name, aggregate_id, data)
+        return self.storage.store(
+            aggregate_type=self.aggregate_class.get_name(),
+            name=name,
+            aggregate_id=aggregate_id,
+            data=data,
+        )
 
     def get_events(self, aggregate_id):
-        return self.storage.get_events(aggregate_id)
+        return self.storage.get_events(self.get_aggregate_name(), aggregate_id)
 
     def get_aggregate(self, aggregate_id):
         aggregate = self.aggregate_class(aggregate_id)

@@ -13,15 +13,15 @@ class TodoApp(BaseApp):
 
     def add(self, name):
         uuid = self.genuuid()
-        return self.repo.store('Todo.Added', uuid, data={'name': name})
+        return self.repo.store('Added', uuid, data={'name': name})
 
     def finish(self, todo_id):
         self.repo.get_aggregate(todo_id)
-        self.repo.store('Todo.Finished', todo_id)
+        self.repo.store('Finished', todo_id)
 
     def reopen(self, todo_id):
         self.repo.get_aggregate(todo_id)
-        self.repo.store('Todo.Reopened', todo_id)
+        self.repo.store('Reopened', todo_id)
 
 
 todos = TodoApp()

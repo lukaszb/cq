@@ -17,6 +17,7 @@ class EventModel(Base):
     id = sqlalchemy.Column(sqlalchemy.String(128), primary_key=True, default=genuuid)
     name = sqlalchemy.Column(sqlalchemy.String(255), index=True)
     aggregate_id = sqlalchemy.Column(sqlalchemy.String(255), index=True)
+    aggregate_type = sqlalchemy.Column(sqlalchemy.String(128), index=True)
     data = sqlalchemy.Column(sqlalchemy.Text(), default='{}')
     ts = sqlalchemy.Column(sqlalchemy.DateTime(), index=True)
 
@@ -34,10 +35,13 @@ class SqlAlchemyStorage(Storage):
         session.commit()
         return obj
 
-    def get_events(self, aggregate_id):
+    def get_events(self, aggregate_type, aggregate_id):
         session = self.get_session()
         # TODO: should be ordered by version, not ts (otoh ts should also work)
-        query = session.query(EventModel).filter(EventModel.aggregate_id==aggregate_id).order_by(EventModel.ts)
+        query = session.query(EventModel).filter(EventModel.aggregate_type == aggregate_type)
+        if aggregate_id:
+            query = query.filter(EventModel.aggregate_id == aggregate_id)
+        query = query.order_by(EventModel.ts)
         return (from_model(e) for e in query)
 
     def book_unique(self, namespace, value, aggregate_id=None):
@@ -79,6 +83,7 @@ def to_model(event):
     return EventModel(
         id=event.id,
         name=event.name,
+        aggregate_type=event.aggregate_type,
         aggregate_id=event.aggregate_id,
         data=json.dumps(event.data),
     )
@@ -87,6 +92,7 @@ def to_model(event):
 def from_model(instance):
     return Event(
         id=instance.id,
+        aggregate_type=instance.aggregate_type,
         name=instance.name,
         aggregate_id=instance.aggregate_id,
         data=json.loads(instance.data),

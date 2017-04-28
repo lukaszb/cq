@@ -17,7 +17,7 @@ def test_register(mocker):
 @pytest.mark.django_db
 def test_activate_with_token(mocker):
     event = app.register(email='joe@doe.com', password='s3cr3t')
-    user = app.repo.get_aggregate(event.aggregate_id)
+    user = app.users.get_aggregate(event.aggregate_id)
     event = app.activate_with_token(user.id, user.activation_token)
     user.mutate(event)
     assert user.is_active
@@ -27,7 +27,7 @@ def test_activate_with_token(mocker):
 def test_activate_with_token__fails_for_already_active_members(mocker):
     event = app.register(email='joe@doe.com', password='s3cr3t')
     app.activate(event.aggregate_id)
-    user = app.repo.get_aggregate(event.aggregate_id)
+    user = app.users.get_aggregate(event.aggregate_id)
     with pytest.raises(AssertionError):
         app.activate_with_token(user.id, user.activation_token)
 

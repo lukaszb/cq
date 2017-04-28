@@ -12,7 +12,7 @@ class User(Aggregate):
         return self.is_active
 
 
-@register_mutator(User, 'User.Registered')
+@register_mutator(User, 'Registered')
 def mutate_registered(aggregate, event, data):
     aggregate.email = data['email']
     aggregate.encoded_password = data['encoded_password']
@@ -20,25 +20,25 @@ def mutate_registered(aggregate, event, data):
     aggregate.is_active = False
 
 
-@register_mutator(User, 'User.ActivatedWithToken')
+@register_mutator(User, 'ActivatedWithToken')
 def mutate_activated_with_token(aggregate, event, data):
     aggregate.is_active = True
     aggregate.activation_token = None
 
 
-@register_mutator(User, 'User.Activated')
+@register_mutator(User, 'Activated')
 def mutate_activated(aggregate, event, data):
     aggregate.is_active = True
     aggregate.activation_token = None
 
 
-@register_mutator(User, 'User.Inactivated')
+@register_mutator(User, 'Inactivated')
 def mutate_inactivated(aggregate, event, data):
     aggregate.is_active = False
     aggregate.activation_token = None
 
 
-@register_mutator(User, 'User.ObtainedAuthToken')
+@register_mutator(User, 'ObtainedAuthToken')
 def mutate_obtained_auth_token(aggregate, event, data):
     aggregate.auth_token = data['auth_token']
 

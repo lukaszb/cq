@@ -1,15 +1,16 @@
 language: python
 
 python:
-    - "3.5"
+    - "3.6"
 
 sudo: false
 
 env:
-    - TOX_ENV=py35-plain
-    - TOX_ENV=py35-sqla
-    - TOX_ENV=py35-d109
-    - TOX_ENV=py35-d110
+    - TOX_ENV=py36-plain
+    - TOX_ENV=py36-sqla
+    - TOX_ENV=py36-d109
+    - TOX_ENV=py36-d110
+    - TOX_ENV=py36-d111
 
 matrix:
     fast_finish: true

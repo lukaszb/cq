@@ -16,9 +16,10 @@ class Storage:
     class DoesNotExist(SesError):
         pass
 
-    def store(self, name, aggregate_id, data=None, ts=None):
+    def store(self, aggregate_type, name, aggregate_id, data=None, ts=None):
         event = self.create_event(
             id=genuuid(),
+            aggregate_type=aggregate_type,
             name=name,
             aggregate_id=aggregate_id,
             data=data,
@@ -28,9 +29,10 @@ class Storage:
         publish(event)
         return event
 
-    def create_event(self, id, name, aggregate_id, data=None, ts=None):
+    def create_event(self, id, aggregate_type, name, aggregate_id, data=None, ts=None):
         return Event(
             id=id,
+            aggregate_type=aggregate_type,
             name=name,
             aggregate_id=aggregate_id,
             data=data,
@@ -40,7 +42,7 @@ class Storage:
     def append(self, event):
         raise NotImplementedError
 
-    def get_events(self, aggregate_id):
+    def get_events(self, name, aggregate_id):
         raise NotImplementedError
 
     def book_unique(self, namespace, value, aggregate_id=None):
@@ -63,8 +65,9 @@ class LocalMemoryStorage(Storage):
         self.events.append(event)
         return event
 
-    def get_events(self, aggregate_id):
-        return [e for e in self.events if e.aggregate_id == aggregate_id]
+    def get_events(self, aggregate_type, aggregate_id):
+        return [e for e in self.events
+                if e.aggregate_id == aggregate_id and e.aggregate_type == aggregate_type]
 
     def book_unique(self, namespace, value, aggregate_id=None):
         if value in self.uniques[namespace]:

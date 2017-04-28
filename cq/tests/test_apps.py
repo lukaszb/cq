@@ -1,4 +1,5 @@
-import cq
+import cq.aggregates
+import cq.app
 
 
 class User(cq.aggregates.Aggregate):

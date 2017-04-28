@@ -1,3 +1,12 @@
+from cq.storages import LocalMemoryStorage
+import pytest
+
+
+@pytest.fixture
+def local_storage():
+    return LocalMemoryStorage()
+
+
 def pytest_addoption(parser):
     parser.addoption('--repeat', default=1, type='int', metavar='repeat',
                      help='Repeat each test specified number of times')

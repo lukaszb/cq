@@ -1,12 +1,6 @@
-from ..storages import LocalMemoryStorage
 from ..storages import Storage
 from unittest import mock
 import pytest
-
-
-@pytest.fixture
-def local_storage():
-    return LocalMemoryStorage()
 
 
 @mock.patch('cq.storages.genuuid', lambda: 'EVENT_ID')

@@ -10,8 +10,8 @@ def local_storage():
 
 
 @mock.patch('cq.storages.genuuid', lambda: 'EVENT_ID')
-@mock.patch('cq.storages.publish')
-def test_store(publish):
+@mock.patch('cq.storages.handle_event')
+def test_store(handle_event):
     storage = Storage()
     with mock.patch.object(storage, 'create_event', return_value='EVENT') as create_event,\
          mock.patch.object(storage, 'append') as append:
@@ -25,7 +25,7 @@ def test_store(publish):
             ts=None,
         )
         append.assert_called_once_with('EVENT')
-        publish.assert_called_once_with('EVENT')
+        handle_event.assert_called_once_with('EVENT')
 
 
 def test_local__append(local_storage):

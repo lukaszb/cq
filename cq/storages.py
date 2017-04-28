@@ -1,7 +1,7 @@
 from .exceptions import SesError
 from .events import Event
 from .genuuid import genuuid
-from .handlers import publish
+from .handlers import handle_event
 from collections import defaultdict
 from collections import namedtuple
 
@@ -26,7 +26,7 @@ class Storage:
             ts=ts,
         )
         self.append(event)
-        publish(event)
+        handle_event(event)
         return event
 
     def create_event(self, id, aggregate_type, name, aggregate_id, data=None, ts=None):

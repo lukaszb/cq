@@ -1,5 +1,13 @@
+from cq.tests.app import Accounts
 from cq import events
 from cq.genuuid import genuuid
+
+
+def test_event_is_upcasted():
+    accounts = Accounts()
+
+    event = accounts.register('joe@doe.com')
+    assert event.data == {'email': 'joe@doe.com', 'role': 'user', 'password': None}
 
 
 def test_event_upcast():

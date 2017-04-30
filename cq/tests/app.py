@@ -38,7 +38,7 @@ class Accounts(cq.app.BaseApp):
         uuid = self.genuuid()
         return self.users.store('Registered', uuid, data={
             'email': email,
-            'encoded_password': password,
+            'password': password,
             'role': role,
         })
 

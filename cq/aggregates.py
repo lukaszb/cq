@@ -57,12 +57,13 @@ class Repository:
             msg = "Repository must define aggregate. Please set %s.aggregate to Aggregate subclass"
             raise RuntimeError(msg % self)
 
-    def store(self, name, aggregate_id, data=None):
+    def store(self, name, aggregate_id, data=None, revision=1):
         return self.storage.store(
             aggregate_type=self.aggregate_class.get_name(),
             name=name,
             aggregate_id=aggregate_id,
             data=data,
+            revision=revision,
         )
 
     def get_events(self, aggregate_id):

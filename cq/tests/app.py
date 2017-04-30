@@ -40,7 +40,7 @@ class Accounts(cq.app.BaseApp):
             'email': email,
             'password': password,
             'role': role,
-        })
+        }, revision=3)
 
     @cq.app.command
     def change_email(self, user_id, email):

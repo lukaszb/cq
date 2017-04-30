@@ -11,6 +11,7 @@ class Event(models.Model):
     aggregate_type = models.CharField(max_length=128, db_index=True)
     name = models.CharField(max_length=128, db_index=True)
     data = jsonfield.JSONField(null=True)
+    revision = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return '%s | %s | %s' % (self.name, self.aggregate_id, self.ts)

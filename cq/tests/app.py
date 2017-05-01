@@ -1,5 +1,6 @@
 import cq.aggregates
 import cq.app
+import cq.handlers
 
 
 class User(cq.aggregates.Aggregate):
@@ -28,10 +29,7 @@ def add_role(event):
 
 
 class Accounts(cq.app.BaseApp):
-
-    def __init__(self):
-        super().__init__()
-        self.users = self.get_repo_for_aggregate(User)
+    repos = {'users': User}
 
     @cq.app.command
     def register(self, email, password=None, role='user'):
@@ -54,3 +52,22 @@ class Accounts(cq.app.BaseApp):
         cq.app.upcaster('User', 'Registered', revision=1, method=add_password),
         cq.app.upcaster('User', 'Registered', revision=2, method=add_role),
     ]
+
+
+@cq.handlers.register_handler('User', 'Registered')
+def handle_user_registered(event, replaying_events):
+    update_projection()
+    if not replaying_events:
+        send_email()
+
+
+def update_projection():
+    """
+    Dummy function (mocked at tests)
+    """
+
+
+def send_email():
+    """
+    Dummy function (mocked at tests)
+    """

@@ -21,7 +21,7 @@ def test_store(handle_event):
             revision=1,
         )
         append.assert_called_once_with('EVENT')
-        handle_event.assert_called_once_with('APPENDED_EVENT')
+        handle_event.assert_called_once_with('APPENDED_EVENT', replaying_events=False)
 
 
 def test_local__append(local_storage):

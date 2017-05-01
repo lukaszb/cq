@@ -27,7 +27,7 @@ class Storage:
             revision=revision,
         )
         self.append(event)
-        handle_event(event)
+        handle_event(event, replaying_events=False)
         return event
 
     def create_event(self, id, aggregate_type, name, aggregate_id, data=None, ts=None, revision=1):

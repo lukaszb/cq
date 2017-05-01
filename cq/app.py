@@ -63,3 +63,12 @@ class BaseApp:
         for repo_name, aggregate in self.repos.items():
             repo = self.get_repo_for_aggregate(aggregate)
             setattr(self, repo_name, repo)
+
+    def pre_replay(self):
+        pass
+
+    def replay_events(self):
+        pass
+
+    def post_replay(self):
+        pass

@@ -10,7 +10,10 @@ class DjangoStorage(Storage):
     def append(self, event):
         obj = to_model(event)
         obj.save()
-        return obj
+        return from_model(obj)
+
+    def iter_all_events(self):
+        return (from_model(e) for e in EventModel.objects.order_by('ts').iterator())
 
     def get_events(self, aggregate_type, aggregate_id=None):
         qs = EventModel.objects.filter(aggregate_type=aggregate_type)

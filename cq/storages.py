@@ -26,7 +26,7 @@ class Storage:
             ts=ts,
             revision=revision,
         )
-        self.append(event)
+        event = self.append(event)
         handle_event(event)
         return event
 
@@ -42,6 +42,9 @@ class Storage:
         )
 
     def append(self, event):
+        raise NotImplementedError
+
+    def iter_all_events(self):
         raise NotImplementedError
 
     def get_events(self, name, aggregate_id):
@@ -66,6 +69,9 @@ class LocalMemoryStorage(Storage):
     def append(self, event):
         self.events.append(event)
         return event
+
+    def iter_all_events(self):
+        return (e for e in self.events)
 
     def get_events(self, aggregate_type, aggregate_id):
         return [e for e in self.events

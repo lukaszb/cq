@@ -1,5 +1,4 @@
 from collections import defaultdict
-from contextlib import contextmanager
 import cq.exceptions
 import inspect
 
@@ -34,6 +33,3 @@ def get_handlers(event):
     return handlers_registry[(event.aggregate_type, event.name)]
 
 
-@contextmanager
-def side_effect():
-    yield

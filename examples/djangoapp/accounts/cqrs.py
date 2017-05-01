@@ -13,9 +13,9 @@ class WrongPassword(SesError):
 class AccountsApp(BaseApp):
     WrongPassword = WrongPassword
 
-    def __init__(self):
-        super().__init__()
-        self.users = self.get_repo_for_aggregate(User)
+    repos = {
+        'users': User,
+    }
 
     def register(self, email, password, role='user'):
         uuid = self.genuuid()

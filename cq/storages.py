@@ -59,6 +59,10 @@ class Storage:
     def has_unique(self, namespace, value):
         raise NotImplementedError
 
+    def replay_events(self):
+        for event in self.iter_all_events():
+            handle_event(event, replaying_events=True)
+
 
 class LocalMemoryStorage(Storage):
 

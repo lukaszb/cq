@@ -1,5 +1,6 @@
 from ..storages import Storage
 from unittest import mock
+import inspect
 import pytest
 
 
@@ -8,7 +9,7 @@ import pytest
 def test_store(handle_event):
     storage = Storage()
     with mock.patch.object(storage, 'create_event', return_value='EVENT') as create_event,\
-         mock.patch.object(storage, 'append') as append:
+            mock.patch.object(storage, 'append') as append:
         storage.store('User', 'Registered', 'aabbcc', {'name': 'joe'})
         create_event.assert_called_once_with(
             id='EVENT_ID',
@@ -80,3 +81,14 @@ def test_local__book_unique_fails_for_duplicate(local_storage):
 
     # first value should not be overridden
     assert local_storage.get_unique('user_email', 'joe@doe.com') == 'JOE_ID'
+
+
+def test_local__iter_all_events(local_storage):
+    all_events = [
+        local_storage.store('User', 'Registered', 'JOE_ID', {'name': 'joe'}, 'TS'),
+        local_storage.store('User', 'Activated', 'JOE_ID', {'name': 'joe'}, 'TS'),
+        local_storage.store('User', 'Registered', 'JANE_ID', {'name': 'jane'}, 'TS'),
+    ]
+
+    assert inspect.isgenerator(local_storage.iter_all_events()) is True
+    assert list(local_storage.iter_all_events()) == all_events

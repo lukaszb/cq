@@ -1,5 +1,6 @@
 from accounts.cqrs import app
 from cq.contrib.django.models import Event
+import inspect
 import pytest
 
 
@@ -13,3 +14,15 @@ def test_register(mocker):
     event = Event.objects.all().get()
 
     assert event.revision == 2
+
+
+@pytest.mark.django_db
+def test_iter_all_events():
+    events = [
+        app.register(email='joe@doe.com', password='s3cr3t'),
+        app.register(email='kate@doe.com', password='s3cr3t'),
+        app.register(email='mia@doe.com', password='s3cr3t'),
+    ]
+
+    assert inspect.isgenerator(app.storage.iter_all_events()) is True
+    assert list(app.storage.iter_all_events()) == events

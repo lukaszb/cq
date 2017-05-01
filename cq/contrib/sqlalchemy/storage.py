@@ -34,7 +34,11 @@ class SqlAlchemyStorage(Storage):
         session = self.get_session()
         session.add(obj)
         session.commit()
-        return obj
+        return from_model(obj)
+
+    def iter_all_events(self):
+        session = self.get_session()
+        return (from_model(e) for e in session.query(EventModel).order_by(EventModel.ts))
 
     def get_events(self, aggregate_type, aggregate_id):
         session = self.get_session()
@@ -87,6 +91,7 @@ def to_model(event):
         aggregate_type=event.aggregate_type,
         aggregate_id=event.aggregate_id,
         data=json.dumps(event.data),
+        ts=event.ts,
         revision=event.revision,
     )
 

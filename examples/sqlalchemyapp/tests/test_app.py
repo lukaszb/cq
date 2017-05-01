@@ -1,5 +1,6 @@
 from cq.contrib.sqlalchemy.storage import SqlAlchemyStorage
 from sqlalchemyapp.cqrs import TodoApp
+import inspect
 import pytest
 
 
@@ -10,6 +11,12 @@ def app():
 
 def test_storage(app):
     assert isinstance(app.storage, SqlAlchemyStorage)
+
+
+def test_storage__iter_all_events(app):
+    events = [app.add('foo'), app.add('bar')]
+    assert inspect.isgenerator(app.storage.iter_all_events()) is True
+    assert list(app.storage.iter_all_events()) == events
 
 
 def test_add(app):

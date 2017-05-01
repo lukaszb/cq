@@ -9,5 +9,6 @@ def handle_registered_user(event):
         id=event.aggregate_id,
         email=event.data['email'],
         registered_at=event.ts,
+        role=event.data['role'],
     )
     # send email with activation token etc

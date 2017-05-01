@@ -12,4 +12,4 @@ def test_register(mocker):
     assert Event.objects.count() == 1
     event = Event.objects.all().get()
 
-    assert event.revision == 1
+    assert event.revision == 2

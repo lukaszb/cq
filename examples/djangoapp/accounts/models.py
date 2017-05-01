@@ -7,6 +7,7 @@ class User(models.Model):
     registered_at = models.DateTimeField()
     last_logged_in_at = models.DateTimeField(null=True)
     last_logged_out_at = models.DateTimeField(null=True)
+    role = models.CharField(max_length=32)
 
     def __str__(self):
         return self.email

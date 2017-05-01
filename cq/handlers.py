@@ -21,7 +21,6 @@ def check_handler_signature(handler):
     if params != ['event', 'replaying_events']:
         handler_path = get_obj_path(handler)
         msg = "Handlers must accept 'event' and 'replaying_events' (%s does not)" % handler_path
-        print(" params: %s" % str(params))
         raise cq.exceptions.ImproperlyConfigured(msg)
 
 

@@ -1,4 +1,3 @@
-from .aggregates import User
 from .models import User as UserProjection
 from cq.handlers import register_handler
 

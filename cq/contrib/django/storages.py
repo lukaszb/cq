@@ -42,6 +42,7 @@ def to_model(event):
         aggregate_id=event.aggregate_id,
         aggregate_type=event.aggregate_type,
         data=event.data,
+        revision=event.revision,
     )
 
 
@@ -53,4 +54,5 @@ def from_model(instance):
         aggregate_type=instance.aggregate_type,
         data=instance.data,
         ts=instance.ts,
+        revision=instance.revision,
     )

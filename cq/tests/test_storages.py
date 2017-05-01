@@ -17,6 +17,7 @@ def test_store(handle_event):
             aggregate_id='aabbcc',
             data={'name': 'joe'},
             ts=None,
+            revision=1,
         )
         append.assert_called_once_with('EVENT')
         handle_event.assert_called_once_with('EVENT')

@@ -2,6 +2,7 @@ from . import exceptions
 from . import genuuid
 from . import settings
 from .aggregates import Repository
+from .events import upcaster
 
 
 def command(method):

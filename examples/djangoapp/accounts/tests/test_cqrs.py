@@ -11,6 +11,7 @@ def test_register(mocker):
         'email': 'joe@doe.com',
         'encoded_password': 'encoded_s3cr3t',
         'activation_token': 'ACTIVATION_TOKEN',
+        'role': 'user',
     }
 
 

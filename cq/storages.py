@@ -16,7 +16,7 @@ class Storage:
     class DoesNotExist(SesError):
         pass
 
-    def store(self, aggregate_type, name, aggregate_id, data=None, ts=None):
+    def store(self, aggregate_type, name, aggregate_id, data=None, ts=None, revision=1):
         event = self.create_event(
             id=genuuid(),
             aggregate_type=aggregate_type,
@@ -24,12 +24,13 @@ class Storage:
             aggregate_id=aggregate_id,
             data=data,
             ts=ts,
+            revision=revision,
         )
         self.append(event)
         handle_event(event)
         return event
 
-    def create_event(self, id, aggregate_type, name, aggregate_id, data=None, ts=None):
+    def create_event(self, id, aggregate_type, name, aggregate_id, data=None, ts=None, revision=1):
         return Event(
             id=id,
             aggregate_type=aggregate_type,
@@ -37,6 +38,7 @@ class Storage:
             aggregate_id=aggregate_id,
             data=data,
             ts=ts,
+            revision=revision,
         )
 
     def append(self, event):

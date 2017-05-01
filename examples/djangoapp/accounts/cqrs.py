@@ -17,14 +17,15 @@ class AccountsApp(BaseApp):
         super().__init__()
         self.users = self.get_repo_for_aggregate(User)
 
-    def register(self, email, password):
+    def register(self, email, password, role='user'):
         uuid = self.genuuid()
         self.storage.book_unique('user', email, aggregate_id=uuid)
         return self.users.store('Registered', uuid, data={
             'email': email,
             'encoded_password': make_password(password),
             'activation_token': self.genuuid(),
-        })
+            'role': role,
+        }, revision=2)
 
     def activate_with_token(self, user_id, token):
         user = get_aggregate_or_404(self.users, user_id)

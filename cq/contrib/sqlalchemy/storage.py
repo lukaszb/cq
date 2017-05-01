@@ -20,6 +20,7 @@ class EventModel(Base):
     aggregate_type = sqlalchemy.Column(sqlalchemy.String(128), index=True)
     data = sqlalchemy.Column(sqlalchemy.Text(), default='{}')
     ts = sqlalchemy.Column(sqlalchemy.DateTime(), index=True)
+    revision = sqlalchemy.Column(sqlalchemy.Integer(), default=1)
 
 
 class SqlAlchemyStorage(Storage):
@@ -86,6 +87,7 @@ def to_model(event):
         aggregate_type=event.aggregate_type,
         aggregate_id=event.aggregate_id,
         data=json.dumps(event.data),
+        revision=event.revision,
     )
 
 
@@ -97,4 +99,5 @@ def from_model(instance):
         aggregate_id=instance.aggregate_id,
         data=json.loads(instance.data),
         ts=instance.ts,
+        revision=instance.revision,
     )

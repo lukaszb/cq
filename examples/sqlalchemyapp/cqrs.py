@@ -6,10 +6,7 @@ from cq.contrib.sqlalchemy.storage import SqlAlchemyStorage
 class TodoApp(BaseApp):
     storage_class = SqlAlchemyStorage
     storage_kwargs = {'db_uri': 'sqlite:///:memory:'}
-
-    def __init__(self):
-        super().__init__()
-        self.repo = self.get_repo_for_aggregate(Todo)
+    repos = {'repo': Todo}
 
     def add(self, name):
         uuid = self.genuuid()

@@ -5,6 +5,9 @@ from .aggregates import Repository
 from .events import upcaster
 
 
+__all__ = ['BaseApp', 'command', 'query', 'upcaster']
+
+
 def command(method):
     method.is_command = True
     return method
@@ -18,9 +21,11 @@ def query(method):
 class BaseApp:
     storage_class = None
     storage_kwargs = {}
+    repos = {}
 
     def __init__(self):
         self.storage = self.get_storage()
+        self.create_repos()
 
     def get_storage(self):
         storage_class = self.get_storage_class()
@@ -53,3 +58,8 @@ class BaseApp:
     def get_queries(self):
         objects = (getattr(self, attr) for attr in dir(self))
         return [obj for obj in objects if getattr(obj, 'is_query', False)]
+
+    def create_repos(self):
+        for repo_name, aggregate in self.repos.items():
+            repo = self.get_repo_for_aggregate(aggregate)
+            setattr(self, repo_name, repo)

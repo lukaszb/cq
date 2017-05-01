@@ -26,7 +26,7 @@ class Storage:
             ts=ts,
             revision=revision,
         )
-        self.append(event)
+        event = self.append(event)
         handle_event(event)
         return event
 

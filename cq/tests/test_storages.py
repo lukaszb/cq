@@ -9,7 +9,7 @@ import pytest
 def test_store(handle_event):
     storage = Storage()
     with mock.patch.object(storage, 'create_event', return_value='EVENT') as create_event,\
-            mock.patch.object(storage, 'append') as append:
+            mock.patch.object(storage, 'append', return_value='APPENDED_EVENT') as append:
         storage.store('User', 'Registered', 'aabbcc', {'name': 'joe'})
         create_event.assert_called_once_with(
             id='EVENT_ID',
@@ -21,7 +21,7 @@ def test_store(handle_event):
             revision=1,
         )
         append.assert_called_once_with('EVENT')
-        handle_event.assert_called_once_with('EVENT')
+        handle_event.assert_called_once_with('APPENDED_EVENT')
 
 
 def test_local__append(local_storage):

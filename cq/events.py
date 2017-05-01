@@ -18,6 +18,19 @@ class Event:
     def __str__(self):
         return '%s.%s | %s | %s' % (self.aggregate_type, self.name, self.aggregate_id, self.ts)
 
+    def __eq__(self, other):
+        return all((
+            self.id == other.id,
+            self.aggregate_type == other.aggregate_type,
+            self.name == other.name,
+            self.ts == other.ts,
+            self.data == other.data,
+            self.revision == other.revision,
+        ))
+
+    def __hash__(self):
+        return hash((self.id, self.aggregate_type, self.name, self.aggregate_id, self.ts, self.revision))
+
 
 def upcast(event, upcasters):
     event_upcasters = get_upcasters_for_event(event, upcasters)

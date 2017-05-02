@@ -1,5 +1,4 @@
 class Aggregate:
-    mutators = {}
 
     def __init__(self, id):
         self.id = id
@@ -31,6 +30,9 @@ class Aggregate:
 def register_mutator(aggregate_class, event_name):
 
     def outer(method):
+        if not hasattr(aggregate_class, 'mutators'):
+            aggregate_class.mutators = {}
+
         if event_name in aggregate_class.mutators:
             msg = "Mutator for action %s is already registered for %s" % (event_name, aggregate_class)
             raise RuntimeError(msg)

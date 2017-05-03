@@ -79,6 +79,7 @@ class Repository:
             revision=revision,
         )
         event = self.upcast_event(event)
+        # this way whenever we store an event it would already be upcasted for a handler
         return event
 
     def upcast_event(self, event):
@@ -87,7 +88,8 @@ class Repository:
         return event
 
     def get_events(self, aggregate_id):
-        return self.storage.get_events(self.get_aggregate_name(), aggregate_id)
+        events = self.storage.get_events(self.get_aggregate_name(), aggregate_id)
+        return [self.upcast_event(event) for event in events]
 
     def get_aggregate(self, aggregate_id):
         aggregate = self.aggregate_class(aggregate_id)

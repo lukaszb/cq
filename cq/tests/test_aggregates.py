@@ -1,3 +1,4 @@
+from .app import Accounts
 import cq.aggregates
 
 
@@ -21,3 +22,11 @@ def test_register_mutators_set_mutator_for_subclass():
 
     assert User.mutators == {'Created': user_created}
     assert Project.mutators == {'Created': project_created}
+
+
+def test_aggregate_is_rehydrated_with_upcasted_events():
+    accounts = Accounts()
+    user_id = accounts.genuuid()
+    accounts.storage.store('User', 'Registered', user_id, data={'email': 'joe@doe.com'})
+    user = accounts.users.get_aggregate(user_id)
+    assert user.role == 'user'

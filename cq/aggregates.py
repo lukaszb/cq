@@ -1,3 +1,10 @@
+import cq.events
+from cq.events import upcaster
+
+
+__all__ = ['upcaster', 'Aggregate', 'Repository', 'register_mutator']
+
+
 class Aggregate:
 
     def __init__(self, id):
@@ -25,6 +32,10 @@ class Aggregate:
     @classmethod
     def get_name(cls):
         return cls.__name__
+
+    @classmethod
+    def get_upcasters(cls):
+        return getattr(cls, 'upcasters', [])
 
 
 def register_mutator(aggregate_class, event_name):
@@ -60,13 +71,20 @@ class Repository:
             raise RuntimeError(msg % self)
 
     def store(self, name, aggregate_id, data=None, revision=1):
-        return self.storage.store(
+        event = self.storage.store(
             aggregate_type=self.aggregate_class.get_name(),
             name=name,
             aggregate_id=aggregate_id,
             data=data,
             revision=revision,
         )
+        event = self.upcast_event(event)
+        return event
+
+    def upcast_event(self, event):
+        upcasters = self.aggregate_class.get_upcasters()
+        event = cq.events.upcast(event, upcasters)
+        return event
 
     def get_events(self, aggregate_id):
         return self.storage.get_events(self.get_aggregate_name(), aggregate_id)

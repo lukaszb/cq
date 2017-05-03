@@ -36,6 +36,7 @@ def upcast(event, upcasters):
     event_upcasters = get_upcasters_for_event(event, upcasters)
     for upcaster in event_upcasters:
         single_upcast(event, upcaster)
+    return event
 
 
 def single_upcast(event, upcaster):

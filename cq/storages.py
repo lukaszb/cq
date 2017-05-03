@@ -4,6 +4,7 @@ from .genuuid import genuuid
 from .handlers import handle_event
 from collections import defaultdict
 from collections import namedtuple
+import cq.events
 
 
 UniqueItem = namedtuple('UniqueItem', '')
@@ -59,8 +60,11 @@ class Storage:
     def has_unique(self, namespace, value):
         raise NotImplementedError
 
-    def replay_events(self):
-        for event in self.iter_all_events():
+    def replay_events(self, upcasters=None):
+        upcasters = upcasters or []
+        events = self.iter_all_events()
+        events = (cq.events.upcast(event, upcasters) for event in events)
+        for event in events:
             handle_event(event, replaying_events=True)
 
 

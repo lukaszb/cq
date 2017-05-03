@@ -3,11 +3,24 @@ import cq.app
 import cq.handlers
 
 
+def add_password(event):
+    event.data['password'] = None
+
+
+def add_role(event):
+    event.data['role'] = 'user'
+
+
 class User(cq.aggregates.Aggregate):
 
     def __init__(self, uuid):
         super().__init__(uuid)
         self.email = None
+
+    upcasters = [
+        cq.aggregates.upcaster('User', 'Registered', revision=1, method=add_password),
+        cq.aggregates.upcaster('User', 'Registered', revision=2, method=add_role),
+    ]
 
 
 @cq.aggregates.register_mutator(User, 'Registered')
@@ -18,14 +31,6 @@ def mutate_registered(instance, event, data):
 @cq.aggregates.register_mutator(User, 'EmailChanged')
 def mutate_email_changed(instance, event, data):
     instance.email = data['email']
-
-
-def add_password(event):
-    event.data['password'] = None
-
-
-def add_role(event):
-    event.data['role'] = 'user'
 
 
 class Accounts(cq.app.BaseApp):
@@ -47,11 +52,6 @@ class Accounts(cq.app.BaseApp):
     @cq.app.query
     def get(self, user_id):
         return self.users.get_aggregate(user_id)
-
-    upcasters = [
-        cq.app.upcaster('User', 'Registered', revision=1, method=add_password),
-        cq.app.upcaster('User', 'Registered', revision=2, method=add_role),
-    ]
 
 
 @cq.handlers.register_handler('User', 'Registered')

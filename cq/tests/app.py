@@ -26,6 +26,8 @@ class User(cq.aggregates.Aggregate):
 @cq.aggregates.register_mutator(User, 'Registered')
 def mutate_registered(instance, event, data):
     instance.email = data['email']
+    instance.password = data['password']
+    instance.role = data['role']
 
 
 @cq.aggregates.register_mutator(User, 'EmailChanged')

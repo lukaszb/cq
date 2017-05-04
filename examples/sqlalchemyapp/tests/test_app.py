@@ -1,10 +1,22 @@
+from cq.contrib.sqlalchemy.storage import SqlAlchemyStorage
 from sqlalchemyapp.cqrs import TodoApp
+import inspect
 import pytest
 
 
 @pytest.fixture
 def app():
     return TodoApp()
+
+
+def test_storage(app):
+    assert isinstance(app.storage, SqlAlchemyStorage)
+
+
+def test_storage__iter_all_events(app):
+    events = [app.add('foo'), app.add('bar')]
+    assert inspect.isgenerator(app.storage.iter_all_events()) is True
+    assert list(app.storage.iter_all_events()) == events
 
 
 def test_add(app):
@@ -42,13 +54,13 @@ def test_get_events(app):
 
     todo_1_events = [(e.aggregate_id, e.name) for e in app.repo.get_events(todo_id_1)]
     assert todo_1_events == [
-        (todo_id_1, 'Todo.Added'),
-        (todo_id_1, 'Todo.Finished'),
-        (todo_id_1, 'Todo.Reopened'),
+        (todo_id_1, 'Added'),
+        (todo_id_1, 'Finished'),
+        (todo_id_1, 'Reopened'),
     ]
 
     todo_2_events = [(e.aggregate_id, e.name) for e in app.repo.get_events(todo_id_2)]
     assert todo_2_events == [
-        (todo_id_2, 'Todo.Added'),
-        (todo_id_2, 'Todo.Finished'),
+        (todo_id_2, 'Added'),
+        (todo_id_2, 'Finished'),
     ]

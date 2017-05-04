@@ -3,7 +3,7 @@ PYTHON ?= python3
 export VIRTUAL_ENV := $(realpath .)/venv
 export TOX_DIR := $(realpath .)/.tox
 export PATH := $(VIRTUAL_ENV)/bin:$(PATH)
-export DJANGO_MANAGE := $(TOX_DIR)/py35-d110/bin/python examples/djangoapp/manage.py
+export DJANGO_MANAGE := $(TOX_DIR)/py36-d111/bin/python examples/djangoapp/manage.py
 unexport WORKON_HOME PIP_RESPECT_VIRTUALENV PIP_VIRTUALENV_BASE
 
 help:
@@ -15,6 +15,7 @@ help:
 	@echo '  make clean'
 	@echo '  make test'
 	@echo '  make tdd'
+	@echo '  make django_makemigrations'
 
 
 # Top-level phony targets

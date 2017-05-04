@@ -1,4 +1,5 @@
 .tox
+dist
 venv
 *.pyc
 *.log

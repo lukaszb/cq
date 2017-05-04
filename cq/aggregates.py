@@ -1,9 +1,15 @@
+import cq.events
+from cq.events import upcaster
+
+
+__all__ = ['upcaster', 'Aggregate', 'Repository', 'register_mutator']
+
+
 class Aggregate:
-    mutators = {}
 
     def __init__(self, id):
         self.id = id
-        self.version = 1
+        self.version = 0
 
     def __repr__(self):
         return '<%s: %s>' % (self.__class__.__name__, self.id)
@@ -27,10 +33,17 @@ class Aggregate:
     def get_name(cls):
         return cls.__name__
 
+    @classmethod
+    def get_upcasters(cls):
+        return getattr(cls, 'upcasters', [])
+
 
 def register_mutator(aggregate_class, event_name):
 
     def outer(method):
+        if not hasattr(aggregate_class, 'mutators'):
+            aggregate_class.mutators = {}
+
         if event_name in aggregate_class.mutators:
             msg = "Mutator for action %s is already registered for %s" % (event_name, aggregate_class)
             raise RuntimeError(msg)
@@ -57,11 +70,26 @@ class Repository:
             msg = "Repository must define aggregate. Please set %s.aggregate to Aggregate subclass"
             raise RuntimeError(msg % self)
 
-    def store(self, name, aggregate_id, data=None):
-        return self.storage.store(name, aggregate_id, data)
+    def store(self, name, aggregate_id, data=None, revision=1):
+        event = self.storage.store(
+            aggregate_type=self.aggregate_class.get_name(),
+            name=name,
+            aggregate_id=aggregate_id,
+            data=data,
+            revision=revision,
+        )
+        event = self.upcast_event(event)
+        # this way whenever we store an event it would already be upcasted for a handler
+        return event
+
+    def upcast_event(self, event):
+        upcasters = self.aggregate_class.get_upcasters()
+        event = cq.events.upcast(event, upcasters)
+        return event
 
     def get_events(self, aggregate_id):
-        return self.storage.get_events(aggregate_id)
+        events = self.storage.get_events(self.get_aggregate_name(), aggregate_id)
+        return [self.upcast_event(event) for event in events]
 
     def get_aggregate(self, aggregate_id):
         aggregate = self.aggregate_class(aggregate_id)

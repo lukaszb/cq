@@ -10,10 +10,16 @@ class DjangoStorage(Storage):
     def append(self, event):
         obj = to_model(event)
         obj.save()
-        return obj
+        return from_model(obj)
 
-    def get_events(self, aggregate_id):
-        qs = EventModel.objects.filter(aggregate_id=aggregate_id).order_by('ts')
+    def iter_all_events(self):
+        return (from_model(e) for e in EventModel.objects.order_by('ts').iterator())
+
+    def get_events(self, aggregate_type, aggregate_id=None):
+        qs = EventModel.objects.filter(aggregate_type=aggregate_type)
+        if aggregate_id:
+            qs = qs.filter(aggregate_id=aggregate_id)
+        qs = qs.order_by('ts')
         return (from_model(e) for e in qs)
 
     def book_unique(self, namespace, value, aggregate_id):
@@ -37,7 +43,9 @@ def to_model(event):
         id=event.id,
         name=event.name,
         aggregate_id=event.aggregate_id,
+        aggregate_type=event.aggregate_type,
         data=event.data,
+        revision=event.revision,
     )
 
 
@@ -46,6 +54,8 @@ def from_model(instance):
         id=instance.id,
         name=instance.name,
         aggregate_id=instance.aggregate_id,
+        aggregate_type=instance.aggregate_type,
         data=instance.data,
         ts=instance.ts,
+        revision=instance.revision,
     )

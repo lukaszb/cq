@@ -1,5 +1,8 @@
 from cq.aggregates import Aggregate
 from cq.aggregates import register_mutator
+from cq.schemas import Schema
+from cq.schemas import fields
+from cq.schemas import register_schema
 
 
 class User(Aggregate):
@@ -10,6 +13,34 @@ class User(Aggregate):
         Mimics what original Django's auth.User does
         """
         return self.is_active
+
+
+@register_schema(User, 'Registered')
+class UserRegisteredSchema(Schema):
+    email = fields.Number()
+    encoded_password = fields.Str()
+    activation_token = fields.Str()
+    role = fields.Str()
+
+
+@register_schema(User, 'ActivatedWithToken')
+class ActivatedWithTokenSchema(Schema):
+    pass
+
+
+@register_schema(User, 'Activated')
+class ActivatedSchema(Schema):
+    pass
+
+
+@register_schema(User, 'Inactivated')
+class InactivatedSchema(Schema):
+    pass
+
+
+@register_schema(User, 'ObtainedAuthToken')
+class ObtainedAuthTokenSchema(Schema):
+    auth_token = fields.Str()
 
 
 @register_mutator(User, 'Registered')

@@ -6,3 +6,7 @@ class SesError(Exception):
 
 class ImproperlyConfigured(SesError):
     pass
+
+
+class SchemaValidationError(Exception):
+    pass

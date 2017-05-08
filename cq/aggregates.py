@@ -1,5 +1,6 @@
 import cq.events
 from cq.events import upcaster
+from cq.exceptions import SchemaValidationError
 
 
 __all__ = ['upcaster', 'Aggregate', 'Repository', 'register_mutator']
@@ -71,6 +72,8 @@ class Repository:
             raise RuntimeError(msg % self)
 
     def store(self, name, aggregate_id, data=None, revision=1):
+        self.validate_event(name, data)
+
         event = self.storage.store(
             aggregate_type=self.aggregate_class.get_name(),
             name=name,
@@ -81,6 +84,18 @@ class Repository:
         event = self.upcast_event(event)
         # this way whenever we store an event it would already be upcasted for a handler
         return event
+
+    def validate_event(self, name, data):
+        schemas = getattr(self.aggregate_class, 'schemas', {})
+        if name not in schemas:
+            # schema not available, skipping
+            return
+
+        schema = schemas[name]()
+        result = schema.load(data)
+        if result.errors:
+            msg = "Error storing %s.%s event: %s." % (self.aggregate_class.get_name(), name, result.errors)
+            raise SchemaValidationError(msg)
 
     def upcast_event(self, event):
         upcasters = self.aggregate_class.get_upcasters()

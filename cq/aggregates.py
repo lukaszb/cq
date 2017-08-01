@@ -37,13 +37,15 @@ class Aggregate:
     def validate(cls, event_name, event_data):
         schema_cls = cls.get_schema(event_name)
         if not schema_cls:
-            return
+            return True
 
         schema = schema_cls()
         result = schema.load(event_data)
         if result.errors:
             msg = "Error validatng %s.%s event. Details: %s." % (cls.get_name(), event_name, result.errors)
             raise SchemaValidationError(msg)
+
+        return True
 
     @classmethod
     def get_schema(cls, name):

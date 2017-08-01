@@ -26,6 +26,6 @@ setup(
     include_package_data=True,
     install_requires=[
         'jsonfield',  # TODO: only needed django, make it optional
-        'marshmallow==2.13.5',
+        'marshmallow>=2.13',
     ],
 )

@@ -20,15 +20,35 @@ class Aggregate:
         mutator(self, event, event.data)
         self.version += 1
 
-    def get_mutator(self, name):
+    @classmethod
+    def get_mutator(cls, name):
         try:
-            return self.__class__.mutators[name]
+            # mutators attribute gets created only on first mutator registration.
+            mutators = getattr(cls, 'mutators', {})
+            return mutators[name]
         except KeyError:
-            msg = '%s has no mutator function registered for event type %r. ' % (self, name)
+            msg = '%s has no mutator function registered for event type %r. ' % (cls, name)
             msg += 'Please register method using @aggregates.register_mutator decorator. '
-            registered_actions = ', '.join(repr(a) for a in self.__class__.mutators)
+            registered_actions = ', '.join(repr(a) for a in mutators)
             msg += 'Currently registered actions: %s' % (registered_actions or '-')
             raise NotImplementedError(msg)
+
+    @classmethod
+    def validate(cls, event_name, event_data):
+        schema_cls = cls.get_schema(event_name)
+        if not schema_cls:
+            return
+
+        schema = schema_cls()
+        result = schema.load(event_data)
+        if result.errors:
+            msg = "Error validatng %s.%s event. Details: %s." % (cls.get_name(), event_name, result.errors)
+            raise SchemaValidationError(msg)
+
+    @classmethod
+    def get_schema(cls, name):
+        schemas = getattr(cls, 'schemas', {})
+        return schemas.get(name)
 
     @classmethod
     def get_name(cls):
@@ -39,17 +59,21 @@ class Aggregate:
         return getattr(cls, 'upcasters', [])
 
 
-def register_mutator(aggregate_class, event_name):
+def register_mutator(aggregate_class, event_name, schema=None):
 
     def outer(method):
         if not hasattr(aggregate_class, 'mutators'):
             aggregate_class.mutators = {}
+        
+        if not hasattr(aggregate_class, 'schemas'):
+            aggregate_class.schemas = {}
 
         if event_name in aggregate_class.mutators:
             msg = "Mutator for action %s is already registered for %s" % (event_name, aggregate_class)
             raise RuntimeError(msg)
         else:
             aggregate_class.mutators[event_name] = method
+            aggregate_class.schemas[event_name] = schema
         return method
 
     return outer
@@ -72,7 +96,7 @@ class Repository:
             raise RuntimeError(msg % self)
 
     def store(self, name, aggregate_id, data=None, revision=1):
-        self.validate_event(name, data)
+        self.aggregate_class.validate(event_name=name, event_data=data)
 
         event = self.storage.store(
             aggregate_type=self.aggregate_class.get_name(),
@@ -84,18 +108,6 @@ class Repository:
         event = self.upcast_event(event)
         # this way whenever we store an event it would already be upcasted for a handler
         return event
-
-    def validate_event(self, name, data):
-        schemas = getattr(self.aggregate_class, 'schemas', {})
-        if name not in schemas:
-            # schema not available, skipping
-            return
-
-        schema = schemas[name]()
-        result = schema.load(data)
-        if result.errors:
-            msg = "Error storing %s.%s event: %s." % (self.aggregate_class.get_name(), name, result.errors)
-            raise SchemaValidationError(msg)
 
     def upcast_event(self, event):
         upcasters = self.aggregate_class.get_upcasters()

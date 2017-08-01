@@ -1,6 +1,9 @@
 .tox
+.cache
+.vscode
 dist
 venv
+cq.egg-info
 *.pyc
 *.log
 *.bak

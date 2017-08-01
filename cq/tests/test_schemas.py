@@ -27,7 +27,7 @@ def test_user_aggreagate_get_schemas():
 
 
 def test_validate_user_registered__valid_data():
-    assert True is User.validate('Registered', {
+    assert User.validate('Registered', {
         'email': 'john@doe.com',
         'password': 'secret',
         'role': 'janitor'
@@ -40,5 +40,21 @@ def test_validate_user_registered__invalid_data():
             'email': 'dummy',
         })
 
-    msg = "Error validatng User.Registered event. Details: {'email': ['Not a valid email address.']}."
+    msg = "Error validatng User.Registered event. Details: {'email': ['Not a valid email address.']}"
+    assert msg in str(exc.value)
+
+
+def test_validate_user_registered__excess_keys():
+    """
+    Strictly report errors if unspecified keys are provided in event payload.
+    """
+    with pytest.raises(cq.exceptions.SchemaValidationError) as exc:
+        assert User.validate('Registered', {
+            'email': 'john@doe.com',
+            'password': 'secret',
+            'role': 'janitor',
+            'unrelated': 'info'
+        })
+
+    msg = "Error validatng User.Registered event. Details: {'unrelated': ['Unknown field']}."
     assert msg in str(exc.value)

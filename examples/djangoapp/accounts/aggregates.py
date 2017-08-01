@@ -22,17 +22,14 @@ class UserRegisteredSchema(EventSchema):
 
 
 class ActivatedWithTokenSchema(EventSchema):
-    # TODO: Make sure this make sure that the even body is empty?
     pass
 
 
 class ActivatedSchema(EventSchema):
-    # TODO: Make sure this make sure that the even body is empty?
     pass
 
 
 class InactivatedSchema(EventSchema):
-    # TODO: Make sure this make sure that the even body is empty?
     pass
 
 

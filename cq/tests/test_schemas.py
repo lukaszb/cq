@@ -40,7 +40,7 @@ def test_validate_user_registered__invalid_data():
             'email': 'dummy',
         })
 
-    msg = "Error validatng User.Registered event. Details: {'email': ['Not a valid email address.']}"
+    msg = "Error validatng User.Registered event: {'email': ['Not a valid email address.']}"
     assert msg in str(exc.value)
 
 
@@ -56,5 +56,5 @@ def test_validate_user_registered__excess_keys():
             'unrelated': 'info'
         })
 
-    msg = "Error validatng User.Registered event. Details: {'unrelated': ['Unknown field']}."
+    msg = "Error validatng User.Registered event: {'unrelated': ['Unknown field']}"
     assert msg in str(exc.value)

@@ -42,8 +42,8 @@ class Aggregate:
         schema = schema_cls()
         result = schema.load(event_data)
         if result.errors:
-            msg = "Error validatng %s.%s event. Details: %s." % (cls.get_name(), event_name, result.errors)
-            raise SchemaValidationError(msg)
+            msg = "Error validatng %s.%s event" % (cls.get_name(), event_name)
+            raise SchemaValidationError(msg, result.errors)
 
         return True
 

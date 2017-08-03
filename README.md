@@ -6,11 +6,13 @@ CQ is a Python microframework built on top of [Command and Query Responsibility 
 
 It is designed to:
 * Help building new (micro)services.
-* Integrate nicely with existing [SQLAlchemy][sqlalchemy] or [Django][django] based applications.
+* Easily integrate with existing [SQLAlchemy][sqlalchemy] or [Django][django] based applications.
 
 ## Usage
 
 If you have never read about CQRS please get familiar with the "CQRS 101 Resources" section before proceeding.
+
+#### Repository
 
 #### Application
 
@@ -31,7 +33,7 @@ Go to the [Project Board][project-board] for detailed release plans.
 ## How to Contribute
 
 1. Check for open issues or open a fresh issue to start a discussion around a feature idea or a bug.
-2. Fork `the repository`_ on GitHub to start making your changes to the **master** branch (or branch off of it).
+2. Fork this repository on GitHub to start making your changes to the **devel** branch (or branch off of it).
 3. Write a test which shows that the bug was fixed or that the feature works as expected.
 4. Send a pull request and bug the maintainer until it gets merged and published.
 
@@ -46,7 +48,7 @@ Go to the [Project Board][project-board] for detailed release plans.
 
 - [Event Sourcing in Python](https://github.com/johnbywater/eventsourcing)
 - [Axon](http://www.axonframework.org)
-
+- [Eventhorizon](https://github.com/looplab/eventhorizon)
 
 
 [build-status-image]: https://secure.travis-ci.org/lukaszb/cq.svg?branch=master

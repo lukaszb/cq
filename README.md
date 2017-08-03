@@ -14,11 +14,12 @@ If you have never read about CQRS please get familiar with the "CQRS 101 Resourc
 
 ### Installation
 
-CQ did not reach its first release milesteone. For this reason we have not released it to PyPI *yet*. If you want to use it use Pip to install cq directly from GitHub:
+CQ did not reach its first release milesteone and was not released to PyPI *yet*. To use it configure Pip for GitHub based installation:
 
 ```bash
 $ pip install https://github.com/lukaszb/cq/archive/master.zip#egg=cq
 ```
+
 ### Configuration
 
 #### Django

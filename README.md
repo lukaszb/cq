@@ -12,6 +12,10 @@ It is designed to:
 
 If you have never read about CQRS please get familiar with the "CQRS 101 Resources" section before proceeding.
 
+### Installation
+
+### Implementation
+
 #### Repository
 
 #### Application

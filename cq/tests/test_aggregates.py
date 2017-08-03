@@ -1,5 +1,6 @@
 from .app import Accounts
 import cq.aggregates
+import pytest
 
 
 class User(cq.aggregates.Aggregate):
@@ -30,3 +31,14 @@ def test_aggregate_is_rehydrated_with_upcasted_events():
     accounts.storage.store('User', 'Registered', user_id, data={'email': 'joe@doe.com'})
     user = accounts.users.get_aggregate(user_id)
     assert user.role == 'user'
+
+
+class AggregateWithoutMutators(cq.aggregates.Aggregate):
+        pass
+
+
+def test_aggregate_get_mutators__none_registered():
+    with pytest.raises(NotImplementedError) as excinfo:
+        AggregateWithoutMutators.get_mutator('dummy_mutator')
+    
+    assert 'no mutator function registered for event' in str(excinfo.value)

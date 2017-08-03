@@ -6,8 +6,8 @@ from cq.genuuid import genuuid
 def test_event_is_upcasted():
     accounts = Accounts()
 
-    event = accounts.register('joe@doe.com')
-    assert event.data == {'email': 'joe@doe.com', 'role': 'user', 'password': None}
+    event = accounts.register('joe@doe.com', password='secret')
+    assert event.data == {'email': 'joe@doe.com', 'role': 'user', 'password': 'secret'}
     assert event.revision == 3
 
 

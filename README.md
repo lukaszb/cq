@@ -28,6 +28,8 @@ $ pip install https://github.com/lukaszb/cq/archive/master.zip#egg=cq
 
 ### Implementation
 
+TODO: A diagram with arch component layout would be helpful here.
+
 #### Repository
 
 #### Application

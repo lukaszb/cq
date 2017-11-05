@@ -61,11 +61,18 @@ class Storage:
         raise NotImplementedError
 
     def replay_events(self, upcasters=None):
+        for event in self.gen_replay_events(upcasters=upcasters):
+            pass
+
+    def gen_replay_events(self, upcasters=None):
         upcasters = upcasters or []
         events = self.iter_all_events()
         events = (cq.events.upcast(event, upcasters) for event in events)
         for event in events:
-            handle_event(event, replaying_events=True)
+            yield self.replay_event(event)
+
+    def replay_event(self, event):
+        handle_event(event, replaying_events=True)
 
 
 class LocalMemoryStorage(Storage):

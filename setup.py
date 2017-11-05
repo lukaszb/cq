@@ -15,7 +15,7 @@ def get_packages(top):
 
 setup(
     name='cq',
-    version='0.9',
+    version='0.10',
     url='https://github.com/lukaszb/cq',
     license='MIT',
     description='simple cqrs implementation',
@@ -26,5 +26,6 @@ setup(
     include_package_data=True,
     install_requires=[
         'jsonfield',  # TODO: only needed django, make it optional
+        'marshmallow>=2.13',
     ],
 )

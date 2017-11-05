@@ -1,6 +1,7 @@
 import cq.aggregates
 import cq.app
 import cq.handlers
+import cq.schemas
 
 
 def add_password(event):
@@ -22,15 +23,24 @@ class User(cq.aggregates.Aggregate):
         cq.aggregates.upcaster('User', 'Registered', revision=2, method=add_role),
     ]
 
+class UserRegisteredSchema(cq.schemas.EventSchema):
+    email = cq.schemas.fields.Email()
+    password = cq.schemas.fields.Str()
+    role = cq.schemas.fields.Str()
 
-@cq.aggregates.register_mutator(User, 'Registered')
+
+class UserEmailChangedSchema(cq.schemas.EventSchema):
+    email = cq.schemas.fields.Email()
+
+
+@cq.aggregates.register_mutator(User, 'Registered', schema=UserRegisteredSchema)
 def mutate_registered(instance, event, data):
     instance.email = data['email']
     instance.password = data['password']
     instance.role = data['role']
 
 
-@cq.aggregates.register_mutator(User, 'EmailChanged')
+@cq.aggregates.register_mutator(User, 'EmailChanged', schema=UserEmailChangedSchema)
 def mutate_email_changed(instance, event, data):
     instance.email = data['email']
 

@@ -3,7 +3,7 @@ from .app import Accounts
 
 def test_aggregate_version_is_bumped():
     accounts = Accounts()
-    user_id = accounts.register('joe@doe.com').aggregate_id
+    user_id = accounts.register('joe@doe.com', password='secret').aggregate_id
     user = accounts.get(user_id)
 
     assert user.email == 'joe@doe.com'

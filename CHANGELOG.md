@@ -1,3 +1,11 @@
+Release 0.10
+============
+
+- Added ability to validate events
+- Added `Storage.gen_replay_events` so user can i.e. follow progress of
+  events being replayed
+
+
 Release 0.9
 ===========
 

@@ -26,6 +26,20 @@ def test_replay_events(send_email, update_projection):
         assert not send_email.called
 
 
+def test_replay_events_generator():
+    accounts = app.Accounts()
+    user_id = accounts.genuuid()
+    accounts.users.store('Registered', user_id, data={'email': 'joe@doe.com'}, revision=1)
+    accounts.users.store('Registered', user_id, data={'email': 'kate@doe.com', 'password': 'secret'}, revision=2)
+
+    with mock.patch.object(app, 'update_projection') as update_projection:
+        for event in accounts.storage.gen_replay_events():
+            print(event)
+            pass
+
+        assert update_projection.call_args_list == [mock.call(), mock.call()]
+
+
 def test_replay_events__passes_upcasted_events_to_handlers():
     accounts = app.Accounts()
     user_id = accounts.genuuid()

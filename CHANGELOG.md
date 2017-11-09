@@ -1,3 +1,8 @@
+Release 0.11
+============
+
+- Fixed `Storage.gen_replay_events` (it was not yielding events)
+
 Release 0.10
 ============
 

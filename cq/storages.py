@@ -69,7 +69,8 @@ class Storage:
         events = self.iter_all_events()
         events = (cq.events.upcast(event, upcasters) for event in events)
         for event in events:
-            yield self.replay_event(event)
+            self.replay_event(event)
+            yield event
 
     def replay_event(self, event):
         handle_event(event, replaying_events=True)

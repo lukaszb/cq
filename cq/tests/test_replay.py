@@ -29,15 +29,17 @@ def test_replay_events(send_email, update_projection):
 def test_replay_events_generator():
     accounts = app.Accounts()
     user_id = accounts.genuuid()
-    accounts.users.store('Registered', user_id, data={'email': 'joe@doe.com'}, revision=1)
-    accounts.users.store('Registered', user_id, data={'email': 'kate@doe.com', 'password': 'secret'}, revision=2)
+    event1 = accounts.users.store('Registered', user_id, data={'email': 'joe@doe.com'}, revision=1)
+    event2 = accounts.users.store('Registered', user_id, data={'email': 'kate@doe.com', 'password': 'secret'}, revision=2)
 
+    replayed_events_ids = []
     with mock.patch.object(app, 'update_projection') as update_projection:
         for event in accounts.storage.gen_replay_events():
-            print(event)
-            pass
+            replayed_events_ids.append(event.id)
 
         assert update_projection.call_args_list == [mock.call(), mock.call()]
+
+    assert replayed_events_ids == [event1.id, event2.id]
 
 
 def test_replay_events__passes_upcasted_events_to_handlers():

@@ -6,7 +6,7 @@ import inspect
 handlers_registry = defaultdict(set)
 
 
-def register_handler(aggregate_type, event_name):
+def register_handler(aggregate_type=None, event_name=None):
     def wrap(handler):
         check_handler_signature(handler)
         handlers_registry[(aggregate_type, event_name)].add(handler)
@@ -30,7 +30,10 @@ def handle_event(event, replaying_events):
 
 
 def get_handlers(event):
-    return handlers_registry[(event.aggregate_type, event.name)]
+    all_events_handlers = handlers_registry[(None, None)]
+    aggregate_handlers = handlers_registry[(event.aggregate_type, None)]
+    specific_handlers = handlers_registry[(event.aggregate_type, event.name)]
+    return all_events_handlers | aggregate_handlers | specific_handlers
 
 
 def get_obj_path(obj):

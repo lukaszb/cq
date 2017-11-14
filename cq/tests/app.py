@@ -73,6 +73,11 @@ def handle_user_registered(event, replaying_events):
         send_email()
 
 
+@cq.handlers.register_handler('User', 'EmailChanged')
+def handle_user_email_changed(event, replaying_events):
+    pass
+
+
 def update_projection():
     """
     Dummy function (mocked at tests)
@@ -83,3 +88,13 @@ def send_email():
     """
     Dummy function (mocked at tests)
     """
+
+
+@cq.handlers.register_handler('User')
+def handle_all_user_events(event, replaying_events):
+    pass
+
+
+@cq.handlers.register_handler()
+def handle_all_events(event, replaying_events):
+    pass

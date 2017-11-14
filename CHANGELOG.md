@@ -1,3 +1,8 @@
+Release 0.12
+============
+
+- Allow to register handlers for all events or all events for certain aggregate type
+
 Release 0.11
 ============
 

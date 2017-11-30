@@ -42,3 +42,17 @@ def test_aggregate_get_mutators__none_registered():
         AggregateWithoutMutators.get_mutator('dummy_mutator')
     
     assert 'no mutator function registered for event' in str(excinfo.value)
+
+
+def test_get_aggregate():
+    app = Accounts()
+    event = app.register(email='joe@doe.com', password='s3cr3t')
+    user = app.users.get_aggregate(event.aggregate_id)
+    assert user.email == 'joe@doe.com'
+
+
+def test_get_aggregate__doesnotexist():
+    app = Accounts()
+    with pytest.raises(app.users.DoesNotExist):
+        user = app.users.get_aggregate('WRONG_ID')
+

@@ -129,6 +129,12 @@ class Repository:
             aggregate.mutate(event)
         return aggregate
 
+    def get_aggregate_or_None(self, aggregate_id):
+        try:
+            return self.get_aggregate(aggregate_id)
+        except self.DoesNotExist:
+            return None
+
     def get_aggregate_name(self):
         if self.aggregate_name:
             return self.aggregate_name

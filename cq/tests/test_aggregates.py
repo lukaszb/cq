@@ -56,3 +56,8 @@ def test_get_aggregate__doesnotexist():
     with pytest.raises(app.users.DoesNotExist):
         user = app.users.get_aggregate('WRONG_ID')
 
+
+def test_get_aggregate_or_None():
+    app = Accounts()
+    user = app.users.get_aggregate_or_None('WRONG_ID')
+    assert user is None

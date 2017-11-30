@@ -15,7 +15,7 @@ def get_packages(top):
 
 setup(
     name='cq',
-    version='0.13dev',
+    version='0.13',
     url='https://github.com/lukaszb/cq',
     license='MIT',
     description='simple cqrs implementation',

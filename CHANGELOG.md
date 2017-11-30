@@ -1,3 +1,10 @@
+Release 0.13
+============
+
+- Fixed `Repository.get_aggregate` method (it now properly raises `DoesNotExist` error if there were
+  no events yet for given `aggregate_id`)
+- Added `Repository.get_aggregate_or_None` method
+
 Release 0.12
 ============
 

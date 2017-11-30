@@ -122,9 +122,18 @@ class Repository:
 
     def get_aggregate(self, aggregate_id):
         aggregate = self.aggregate_class(aggregate_id)
-        for event in self.get_events(aggregate_id):
+        events = self.get_events(aggregate_id)
+        if not events:
+            raise self.DoesNotExist
+        for event in events:
             aggregate.mutate(event)
         return aggregate
+
+    def get_aggregate_or_None(self, aggregate_id):
+        try:
+            return self.get_aggregate(aggregate_id)
+        except self.DoesNotExist:
+            return None
 
     def get_aggregate_name(self):
         if self.aggregate_name:

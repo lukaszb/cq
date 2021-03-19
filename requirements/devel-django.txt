@@ -1,2 +1,2 @@
-djangorestframework==3.5.1
+djangorestframework==3.11.2
 pytest-django==3.0.0
